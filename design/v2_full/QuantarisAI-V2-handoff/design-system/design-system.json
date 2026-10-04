@@ -1,0 +1,206 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Logos": {
+      "files": {
+        "qai-app-icon.svg": {
+          "blob": "2623c00eaa66ff77b51009fa88e8338f",
+          "name": "qai-app-icon.svg",
+          "size": 1913,
+          "type": "image/svg+xml"
+        },
+        "qai-mark-mono.svg": {
+          "blob": "ab78a56104a69b2cd463d633f8f639e9",
+          "name": "qai-mark-mono.svg",
+          "size": 1806,
+          "type": "image/svg+xml"
+        },
+        "qai-mark-reverse.svg": {
+          "blob": "1f789e4fbc36b017fcf2c79c4ec619c7",
+          "name": "qai-mark-reverse.svg",
+          "size": 1806,
+          "type": "image/svg+xml"
+        },
+        "qai-mark-small.svg": {
+          "blob": "99dbe89bbcc73103c32f822f4b5949c0",
+          "name": "qai-mark-small.svg",
+          "size": 429,
+          "type": "image/svg+xml"
+        },
+        "qai-mark.svg": {
+          "blob": "43e0964e1cd43b291b9dc9bfc6a7fa6f",
+          "name": "qai-mark.svg",
+          "size": 1806,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Logos",
+      "order": [
+        "qai-mark.svg",
+        "qai-mark-reverse.svg",
+        "qai-mark-mono.svg",
+        "qai-mark-small.svg",
+        "qai-app-icon.svg"
+      ],
+      "tile": "m"
+    },
+    "Scenes": {
+      "name": "Scenes",
+      "tile": "l",
+      "order": [
+        "ecosystem-scene.png",
+        "ecosystem-scene-dark.png",
+        "factory-twin.png",
+        "factory-twin-dark.png",
+        "india-intelligence-map.png",
+        "india-intelligence-map-dark.png",
+        "flow-material.png",
+        "flow-energy.png",
+        "flow-water.png",
+        "flow-waste.png",
+        "flow-circular.png",
+        "ecosystem-expansion.png",
+        "construction-1-supply.png",
+        "construction-2-resources.png",
+        "construction-3-complete.png"
+      ],
+      "files": {
+        "ecosystem-scene.png": {
+          "name": "ecosystem-scene.png",
+          "blob": "c9388281c9c0ad6aaada5e12aedfc0f8",
+          "size": 429371,
+          "type": "image/png"
+        },
+        "ecosystem-scene-dark.png": {
+          "name": "ecosystem-scene-dark.png",
+          "blob": "cc27c2a827a8f8b89eb9bd2f6dcb6082",
+          "size": 468992,
+          "type": "image/png"
+        },
+        "factory-twin.png": {
+          "name": "factory-twin.png",
+          "blob": "1f97abfc03cc800c548757dc7f7316f4",
+          "size": 477417,
+          "type": "image/png"
+        },
+        "factory-twin-dark.png": {
+          "name": "factory-twin-dark.png",
+          "blob": "124c3544c747fda25a6401fda6c408db",
+          "size": 546744,
+          "type": "image/png"
+        },
+        "india-intelligence-map.png": {
+          "name": "india-intelligence-map.png",
+          "blob": "1ef4152410113e31cc36c9f9cecb6420",
+          "size": 210697,
+          "type": "image/png"
+        },
+        "india-intelligence-map-dark.png": {
+          "name": "india-intelligence-map-dark.png",
+          "blob": "0a3c2800a82de9423097fde0946c11eb",
+          "size": 221727,
+          "type": "image/png"
+        },
+        "flow-material.png": {
+          "name": "flow-material.png",
+          "blob": "76b97a9cbeb213b778a8a4b6e5d84f9a",
+          "size": 527287,
+          "type": "image/png"
+        },
+        "flow-energy.png": {
+          "name": "flow-energy.png",
+          "blob": "616eda328969bd822a5cdb7d49407910",
+          "size": 547344,
+          "type": "image/png"
+        },
+        "flow-water.png": {
+          "name": "flow-water.png",
+          "blob": "86c0c48a8a9ad0ba64287e52be0a89be",
+          "size": 522436,
+          "type": "image/png"
+        },
+        "flow-waste.png": {
+          "name": "flow-waste.png",
+          "blob": "e068f0dd77d1dce5483003829f411a76",
+          "size": 515495,
+          "type": "image/png"
+        },
+        "flow-circular.png": {
+          "name": "flow-circular.png",
+          "blob": "1a0a73365672496c3986d897d86bab1b",
+          "size": 594142,
+          "type": "image/png"
+        },
+        "ecosystem-expansion.png": {
+          "name": "ecosystem-expansion.png",
+          "blob": "ceeef0718a9d47cda811f76a0fa92cb3",
+          "size": 450579,
+          "type": "image/png"
+        },
+        "construction-1-supply.png": {
+          "name": "construction-1-supply.png",
+          "blob": "4e7c740facf88cf5f9e363bd94890c34",
+          "size": 125165,
+          "type": "image/png"
+        },
+        "construction-2-resources.png": {
+          "name": "construction-2-resources.png",
+          "blob": "7793815adc5a5d06980fb7badc6b54a0",
+          "size": 251311,
+          "type": "image/png"
+        },
+        "construction-3-complete.png": {
+          "name": "construction-3-complete.png",
+          "blob": "bf82e1511cbf5bc24b07b9077a740efc",
+          "size": 341484,
+          "type": "image/png"
+        }
+      }
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-04T17:56:46Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "groups": [
+    "Logos",
+    "Scenes"
+  ],
+  "lastChange": {
+    "by": "Krishna",
+    "at": "2026-10-04T20:24:14Z",
+    "via": "Claude (Cowork)",
+    "note": "V2 engineering handoff: screens, components, interactions, 3D asset requirements, responsive, plan, tokens export, A2UI/AG-UI/scene contracts, fixtures"
+  },
+  "layout": "files",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    },
+    {
+      "name": "three",
+      "version": "0.128.0",
+      "global": "THREE",
+      "file": "components/lib/three.min.js"
+    },
+    {
+      "name": "quantaris-scene",
+      "version": "1.0.0",
+      "global": "QuantarisScene",
+      "file": "components/lib/quantaris-scene.js"
+    }
+  ],
+  "namespace": "Quantaris",
+  "sections": {},
+  "title": "QuantarisAI"
+}

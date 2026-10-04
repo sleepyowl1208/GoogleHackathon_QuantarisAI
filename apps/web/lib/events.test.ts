@@ -1,0 +1,8 @@
+import { describe, expect, it } from "vitest";
+import { initialRunState, reduceEvent } from "./events";
+describe("AG-UI reducer",()=>{
+  it("moves a run from start through a scene patch",()=>{const started=reduceEvent(initialRunState,{type:"RUN_STARTED",runId:"run",mission:"Mission"});const state=reduceEvent(started,{type:"SCENE_PATCH",runId:"run",scene:{level:"map",patch:{phase:5,recommended:"tiruppur"}}});expect(state.status).toBe("running");expect(state.scene.map).toMatchObject({phase:5,recommended:"tiruppur"})});
+  it("fails visibly on malformed events",()=>{const state=reduceEvent(initialRunState,{type:"NOT_A_CONTRACT"});expect(state.status).toBe("error");expect(state.error).toContain("Invalid fixture event")});
+  it("adds evidence and discovery from structured events",()=>{let state=reduceEvent(initialRunState,{type:"RUN_STARTED",runId:"run",mission:"Mission"});state=reduceEvent(state,{type:"STEP_FINISHED",runId:"run",step:"identify_materials",result:"Done",evidence:[{id:"e1",kind:"fact",claim:"Known",confidence:.8,illustrative:true}]});state=reduceEvent(state,{type:"DISCOVERY",runId:"run",id:"d",kind:"opportunity",anchor:"cutting",title:"Recovery",evidence:["e1"]});expect(state.evidence.get("e1")?.claim).toBe("Known");expect(state.discoveries).toHaveLength(1)});
+  it("clears a validated clarification after its response",()=>{let state=reduceEvent(initialRunState,{type:"RUN_STARTED",runId:"run",mission:"Mission"});state=reduceEvent(state,{type:"UI_REQUEST",requestId:"q",runId:"run",component:"CapacitySelector",version:1,reason:"Capacity matters",props:{options:[{value:"a",label:"A"},{value:"b",label:"B"}]}});state=reduceEvent(state,{type:"UI_RESPONSE",requestId:"q",value:"a"});expect(state.request).toBeUndefined()});
+});

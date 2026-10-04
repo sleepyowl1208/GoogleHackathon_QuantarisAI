@@ -1,0 +1,47 @@
+<!-- @dsCard group="Screens" height=860 width=1440 page -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Living Industrial Ecosystem</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style>html,body{margin:0;height:100%}</style></head>
+<body>
+<div id="root"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect, useRef = React.useRef;
+  var NAV = [{id:'command',label:'Command Center',index:'00'},{section:'Scenario · T-shirts 1M'},{id:'build',label:'Construction',index:'01'},{id:'map',label:'India Intelligence Map',index:'02'},{id:'eco',label:'Living Ecosystem',index:'03'},{id:'twin',label:'Factory Twin',index:'04'},{id:'impact',label:'Economics & Impact',index:'05'},{id:'circ',label:'Circularity',index:'06'},{section:'Library'},{id:'evidence',label:'Evidence',index:'Σ'}];
+  var ECO_LABELS = [['farms','Cotton farms','raw material'],['mill','Spinning mill','supplier'],['factory','Tiruppur knit unit','1.0M / yr'],['energy','Solar 4 MW','renewable'],['grid','Grid substation',''],['water','Water recovery','ETP + ZLD'],['workforce','Workforce','2,140 people'],['logistics','Thoothukudi port','export'],['waste','Cotton offcuts','34 t / yr']];
+  var ECO_ORDER = {farms:1,mill:2,factory:3,energy:4,grid:4,water:5,workforce:6,logistics:7,waste:8};
+  var MAP_LABELS = [['tiruppur','Tiruppur'],['surat','Surat'],['ludhiana','Ludhiana'],['warangal','Warangal cotton'],['rajkot','Saurashtra cotton'],['nagpur','Vidarbha cotton'],['tuticorin','Thoothukudi port'],['nhava','Nhava Sheva'],['pavagada','Pavagada solar'],['panipat','Panipat recycling']];
+  var PROC = {raw:['Raw materials','1 of 7'],knitting:['Knitting','2 of 7'],dyeing:['Dyeing','3 of 7'],cutting:['Cutting','4 of 7'],sewing:['Sewing','5 of 7'],finishing:['Finishing / QC','6 of 7'],product:['Product','7 of 7']};
+  function ecoLabels(ph, circular, expanded){ var out = ECO_LABELS.filter(function(l){ return (ECO_ORDER[l[0]]||0) <= ph; }).map(function(l){ return h(Q.SceneLabel,{key:l[0],anchor:l[0],meta:l[2],tone:l[0]==='factory'?'selected':''},l[1]); });
+    if (circular==='discovered'||expanded) out.push(h(Q.SceneLabel,{key:'rec',anchor:'recycler',tone:'positive',meta:'recycled fibre'},'Mechanical recycling'));
+    if (expanded) out.push(h(Q.SceneLabel,{key:'fb',anchor:'factoryB',tone:'positive',meta:'new node · 30% blend yarn'},'Recycled-yarn mill'));
+    return out; }
+  function mapLabels(ph, rec){ return MAP_LABELS.filter(function(l){ var k=QuantarisScene.SITES[l[0]].kind; return k==='candidate' ? ph>=2 : ph>=1; }).map(function(l){ var r = rec===l[0] && ph>=4; return h(Q.SceneLabel,{key:l[0],anchor:l[0],tone:r?'selected':(QuantarisScene.SITES[l[0]].kind==='candidate'?'':'muted'),meta:r?'recommended · 0.86':''},l[1]); }); }
+
+
+  var P=[{id:'ren',label:'Renewable energy',current:30,min:0,max:100,unit:'%'},{id:'rec',label:'Waste recovery',current:0,min:0,max:90,unit:'%'},{id:'elec',label:'Electricity price',current:7.8,min:4,max:12,step:0.1,format:function(v){return '₹'+v.toFixed(1)+' / kWh'}}];
+  function App(){ var circ=useState('none'), exp=useState(false), sim=useState({}), focus=useState(null);
+    var ren=sim[0].ren!=null?sim[0].ren:30, dirty=Object.keys(sim[0]).length>0;
+    useEffect(function(){ if(circ[0]==='analysing'){ var t=setTimeout(function(){circ[1]('discovered')},2600); return function(){clearTimeout(t)}; } },[circ[0]]);
+    var k=ecoLabels(8,circ[0],exp[0]);
+    if(circ[0]==='none') k.push(h(Q.DiscoveryMarker,{key:'w',anchor:'waste',kind:'opportunity',label:'34 t/yr recoverable',active:true,onClick:function(){circ[1]('analysing')}}));
+    if(circ[0]==='analysing') k.push(h(Q.DiscoveryMarker,{key:'a',anchor:'waste',kind:'simulation',label:'Searching pathways…'}));
+    k.push(h(Q.DiscoveryMarker,{key:'v',anchor:'water',kind:'verify',label:'Reuse 40%?'}));
+    if(dirty) k.push(h(Q.DiscoveryMarker,{key:'s',anchor:'energy',kind:'simulation',label:ren+'% renewable'}));
+    var card = circ[0]==='none' ? h(Q.DiscoveryCard,{kind:'opportunity',metric:'34',unit:'t / yr',title:'Recoverable cotton offcuts at Cutting',body:'Clean pre-consumer waste currently sold as low-value filler or landfilled.',evidence:['calculation','assumption'],confidence:0.72,actions:[{label:'Explore opportunity',icon:'✦',onClick:function(){circ[1]('analysing')}},{label:'View evidence'}]})
+      : circ[0]==='analysing' ? h('div',{className:'qa-panel qa-pad'},h(Q.ConstructionFeed,{compact:true,current:1,steps:[{label:'Characterising waste stream'},{label:'Matching recovery technologies'},{label:'Finding industrial consumers'},{label:'Testing economics'}]}))
+      : !exp[0] ? h(Q.DiscoveryCard,{kind:'circular',eyebrow:'Circular pathway discovered',metric:'₹27',unit:'lakh / yr',title:'Offcuts → mechanical recycling → recycled fibre → 30% blend yarn',body:'Replaces 14% of virgin cotton and avoids 61 t CO₂e a year.',evidence:['simulation','calculation'],confidence:0.68,actions:[{label:'Model as new industrial opportunity',icon:'✦',onClick:function(){exp[1](true)}},{label:'View evidence'}]})
+      : h(Q.DiscoveryCard,{kind:'expansion',eyebrow:'Ecosystem expanded',title:'Recycled-yarn mill added as Factory B',body:'Factory → cluster: Factory B consumes 34 t / yr from Factory A and supplies the spinning mill.',evidence:['simulation','recommendation'],actions:[{label:'Enter Factory B'},{label:'View evidence'}]});
+    return h('div',{className:'qa-screen',style:{gridTemplateColumns:'224px 1fr'}},h(Q.AppNav,{active:'eco',items:NAV}),
+      h('main',null,h('div',{className:'bar'},h(Q.LevelPath,{current:2}),h('h1',null,'Tiruppur cotton ecosystem'),h('span',{className:'sp'}),
+          h(Q.Button,{size:'sm',onClick:function(){circ[1]('none');exp[1](false);sim[1]({})}},'↺ Reset'),h(Q.Button,{size:'sm',variant:'primary',icon:'↗'},'Enter factory')),
+        h('div',{className:'work',style:{gridTemplateColumns:'1fr 340px'}},
+          h(Q.Scene3D,{kind:'ecosystem',height:'100%',mode:dirty?'simulated':'current',state:{phase:99,circular:circ[0],expanded:exp[0],renewable:ren/100}},k),
+          h('div',{className:'col'},card,
+            h(Q.SimulationPanel,{params:P,values:sim[0],onChange:function(id,v){var n=Object.assign({},sim[0]);n[id]=v;sim[1](n)},onReset:function(){sim[1]({})},
+              results:[{label:'Emissions',current:6.1,simulated:+(6.1*(1-(ren-30)/100*0.62)).toFixed(1),unit:'kt CO₂e'},{label:'Energy cost',current:4.2,simulated:+(4.2*(1-(ren-30)/100*0.21)).toFixed(2),unit:'₹ cr / yr'}],
+              recommendation:ren>=60?{changed:true,text:'Add 6 MW open-access wind (Muppandal) to the solar roof.'}:null})))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

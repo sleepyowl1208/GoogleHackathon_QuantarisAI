@@ -1,0 +1,51 @@
+<!-- @dsCard group="Screens" height=860 width=1440 page -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Hackathon demo walkthrough</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style>html,body{margin:0;height:100%}</style></head>
+<body>
+<div id="root"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect, useRef = React.useRef;
+  var NAV = [{id:'command',label:'Command Center',index:'00'},{section:'Scenario · T-shirts 1M'},{id:'build',label:'Construction',index:'01'},{id:'map',label:'India Intelligence Map',index:'02'},{id:'eco',label:'Living Ecosystem',index:'03'},{id:'twin',label:'Factory Twin',index:'04'},{id:'impact',label:'Economics & Impact',index:'05'},{id:'circ',label:'Circularity',index:'06'},{section:'Library'},{id:'evidence',label:'Evidence',index:'Σ'}];
+  var ECO_LABELS = [['farms','Cotton farms','raw material'],['mill','Spinning mill','supplier'],['factory','Tiruppur knit unit','1.0M / yr'],['energy','Solar 4 MW','renewable'],['grid','Grid substation',''],['water','Water recovery','ETP + ZLD'],['workforce','Workforce','2,140 people'],['logistics','Thoothukudi port','export'],['waste','Cotton offcuts','34 t / yr']];
+  var ECO_ORDER = {farms:1,mill:2,factory:3,energy:4,grid:4,water:5,workforce:6,logistics:7,waste:8};
+  var MAP_LABELS = [['tiruppur','Tiruppur'],['surat','Surat'],['ludhiana','Ludhiana'],['warangal','Warangal cotton'],['rajkot','Saurashtra cotton'],['nagpur','Vidarbha cotton'],['tuticorin','Thoothukudi port'],['nhava','Nhava Sheva'],['pavagada','Pavagada solar'],['panipat','Panipat recycling']];
+  var PROC = {raw:['Raw materials','1 of 7'],knitting:['Knitting','2 of 7'],dyeing:['Dyeing','3 of 7'],cutting:['Cutting','4 of 7'],sewing:['Sewing','5 of 7'],finishing:['Finishing / QC','6 of 7'],product:['Product','7 of 7']};
+  function ecoLabels(ph, circular, expanded){ var out = ECO_LABELS.filter(function(l){ return (ECO_ORDER[l[0]]||0) <= ph; }).map(function(l){ return h(Q.SceneLabel,{key:l[0],anchor:l[0],meta:l[2],tone:l[0]==='factory'?'selected':''},l[1]); });
+    if (circular==='discovered'||expanded) out.push(h(Q.SceneLabel,{key:'rec',anchor:'recycler',tone:'positive',meta:'recycled fibre'},'Mechanical recycling'));
+    if (expanded) out.push(h(Q.SceneLabel,{key:'fb',anchor:'factoryB',tone:'positive',meta:'new node · 30% blend yarn'},'Recycled-yarn mill'));
+    return out; }
+  function mapLabels(ph, rec){ return MAP_LABELS.filter(function(l){ var k=QuantarisScene.SITES[l[0]].kind; return k==='candidate' ? ph>=2 : ph>=1; }).map(function(l){ var r = rec===l[0] && ph>=4; return h(Q.SceneLabel,{key:l[0],anchor:l[0],tone:r?'selected':(QuantarisScene.SITES[l[0]].kind==='candidate'?'':'muted'),meta:r?'recommended · 0.86':''},l[1]); }); }
+
+
+  var B=[
+   {k:'map',s:{phase:0},t:'“Design a sustainable manufacturing ecosystem for 1 million cotton T-shirts annually in India.”',lv:0},
+   {k:'map',s:{phase:1},t:'India appears. Quantaris begins analysing raw materials, clusters and ports.',lv:0},
+   {k:'map',s:{phase:2},t:'Industrial clusters emerge — Tiruppur, Surat and Ludhiana are candidates.',lv:0},
+   {k:'map',s:{phase:3},t:'Quantaris compares them: suitability rises as columns.',lv:0,m:[['punjabwater','constraint','Groundwater stress']]},
+   {k:'map',s:{phase:5},t:'Tiruppur becomes recommended. Supply and export links connect.',lv:1,m:[['tiruppur','location','Recommended 0.86']]},
+   {k:'ecosystem',s:{phase:2},t:'The experience moves into the ecosystem. Suppliers connect.',lv:2},
+   {k:'ecosystem',s:{phase:5,renewable:0.3},t:'Energy appears. Water appears.',lv:2},
+   {k:'ecosystem',s:{phase:8,renewable:0.3},t:'The factory, workforce and logistics materialise.',lv:2,m:[['energy','improvement','−38% CO₂e possible']]},
+   {k:'factory',s:{phase:7},t:'The user enters the factory. Production processes appear; material begins moving.',lv:3},
+   {k:'factory',s:{phase:99,selected:'sewing'},t:'Quantaris identifies a bottleneck at Sewing.',lv:4,m:[['workforce','bottleneck','Sewing at 96%']]},
+   {k:'factory',s:{phase:99,selected:'cutting'},t:'Waste branches from Cutting: 34 t / yr of recoverable cotton offcuts.',lv:4,m:[['offcuts','opportunity','34 t/yr recoverable']]},
+   {k:'ecosystem',s:{phase:99,circular:'analysing'},t:'Quantaris searches circular pathways…',lv:2,m:[['waste','simulation','Searching pathways…']]},
+   {k:'ecosystem',s:{phase:99,circular:'discovered'},t:'A new green path grows: offcuts → mechanical recycling → recycled fibre → yarn.',lv:2,m:[['recycler','circular','Pathway viable']]},
+   {k:'ecosystem',s:{phase:99,circular:'discovered',expanded:true},t:'New industrial opportunity discovered. Factory B emerges — the ecosystem expands.',lv:2,m:[['factoryB','expansion','Model this opportunity']]}];
+  function App(){ var i=useState(0), auto=useState(false), b=B[i[0]];
+    useEffect(function(){ if(!auto[0]) return; var t=setTimeout(function(){ i[1](i[0]>=B.length-1?0:i[0]+1); },3600); return function(){clearTimeout(t)}; },[auto[0],i[0]]);
+    var kids = b.k==='map'?mapLabels(b.s.phase,'tiruppur'):b.k==='ecosystem'?ecoLabels(b.s.phase,b.s.circular,b.s.expanded):Object.keys(PROC).filter(function(id,ix){return ix<(b.s.phase||0)}).map(function(id){return h(Q.SceneLabel,{key:id,anchor:id,tone:id===b.s.selected?'selected':''},PROC[id][0])});
+    (b.m||[]).forEach(function(m,j){kids.push(h(Q.DiscoveryMarker,{key:'m'+j,anchor:m[0],kind:m[1],label:m[2]}))});
+    return h('div',{className:'qa-screen',style:{gridTemplateColumns:'1fr'}},
+      h('main',null,h('div',{className:'bar'},h(Q.Logo,{size:26}),h('span',{className:'qa-eyebrow',style:{marginLeft:8}},'Demo · living industrial ecosystem'),h('span',{className:'sp'}),h(Q.LevelPath,{current:b.lv})),
+        h('div',{className:'work',style:{gridTemplateRows:'1fr auto'}},
+          h(Q.Scene3D,{key:b.k,kind:b.k,state:b.s,height:'100%'},kids),
+          h('div',{className:'qa-caption'},h('span',{className:'n'},String(i[0]+1).padStart(2,'0')+' / '+B.length),h('span',{className:'t'},b.t),
+            h(Q.Button,{size:'sm',onClick:function(){i[1](Math.max(0,i[0]-1))}},'← Back'),h(Q.Button,{size:'sm',onClick:function(){auto[1](!auto[0])}},auto[0]?'❚❚ Pause':'▶ Autoplay'),
+            h(Q.Button,{size:'sm',variant:'primary',onClick:function(){i[1](Math.min(B.length-1,i[0]+1))}},'Next →')))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

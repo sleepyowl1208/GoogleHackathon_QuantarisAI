@@ -1,0 +1,202 @@
+{
+ "$comment": "Illustrative demo data — not live. Replace with sourced values before external use. The 14 beats of ScreenDemoWalkthrough. level = LevelPath index.",
+ "beatMs": 3600,
+ "beats": [
+  {
+   "n": 1,
+   "kind": "map",
+   "state": {
+    "phase": 0
+   },
+   "caption": "“Design a sustainable manufacturing ecosystem for 1 million cotton T-shirts annually in India.”",
+   "level": 0,
+   "markers": []
+  },
+  {
+   "n": 2,
+   "kind": "map",
+   "state": {
+    "phase": 1
+   },
+   "caption": "India appears. Quantaris begins analysing raw materials, clusters and ports.",
+   "level": 0,
+   "markers": []
+  },
+  {
+   "n": 3,
+   "kind": "map",
+   "state": {
+    "phase": 2
+   },
+   "caption": "Industrial clusters emerge — Tiruppur, Surat and Ludhiana are candidates.",
+   "level": 0,
+   "markers": []
+  },
+  {
+   "n": 4,
+   "kind": "map",
+   "state": {
+    "phase": 3
+   },
+   "caption": "Quantaris compares them: suitability rises as columns.",
+   "level": 0,
+   "markers": [
+    {
+     "anchor": "punjabwater",
+     "kind": "constraint",
+     "label": "Groundwater stress"
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "kind": "map",
+   "state": {
+    "phase": 5
+   },
+   "caption": "Tiruppur becomes recommended. Supply and export links connect.",
+   "level": 1,
+   "markers": [
+    {
+     "anchor": "tiruppur",
+     "kind": "location",
+     "label": "Recommended 0.86"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "kind": "ecosystem",
+   "state": {
+    "phase": 2
+   },
+   "caption": "The experience moves into the ecosystem. Suppliers connect.",
+   "level": 2,
+   "markers": []
+  },
+  {
+   "n": 7,
+   "kind": "ecosystem",
+   "state": {
+    "phase": 5,
+    "renewable": 0.3
+   },
+   "caption": "Energy appears. Water appears.",
+   "level": 2,
+   "markers": []
+  },
+  {
+   "n": 8,
+   "kind": "ecosystem",
+   "state": {
+    "phase": 8,
+    "renewable": 0.3
+   },
+   "caption": "The factory, workforce and logistics materialise.",
+   "level": 2,
+   "markers": [
+    {
+     "anchor": "energy",
+     "kind": "improvement",
+     "label": "−38% CO₂e possible"
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "kind": "factory",
+   "state": {
+    "phase": 7
+   },
+   "caption": "The user enters the factory. Production processes appear; material begins moving.",
+   "level": 3,
+   "markers": []
+  },
+  {
+   "n": 10,
+   "kind": "factory",
+   "state": {
+    "phase": 99,
+    "selected": "sewing"
+   },
+   "caption": "Quantaris identifies a bottleneck at Sewing.",
+   "level": 4,
+   "markers": [
+    {
+     "anchor": "workforce",
+     "kind": "bottleneck",
+     "label": "Sewing at 96%"
+    }
+   ]
+  },
+  {
+   "n": 11,
+   "kind": "factory",
+   "state": {
+    "phase": 99,
+    "selected": "cutting"
+   },
+   "caption": "Waste branches from Cutting: 34 t / yr of recoverable cotton offcuts.",
+   "level": 4,
+   "markers": [
+    {
+     "anchor": "offcuts",
+     "kind": "opportunity",
+     "label": "34 t/yr recoverable"
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "kind": "ecosystem",
+   "state": {
+    "phase": 99,
+    "circular": "analysing"
+   },
+   "caption": "Quantaris searches circular pathways…",
+   "level": 2,
+   "markers": [
+    {
+     "anchor": "waste",
+     "kind": "simulation",
+     "label": "Searching pathways…"
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "kind": "ecosystem",
+   "state": {
+    "phase": 99,
+    "circular": "discovered"
+   },
+   "caption": "A new green path grows: offcuts → mechanical recycling → recycled fibre → yarn.",
+   "level": 2,
+   "markers": [
+    {
+     "anchor": "recycler",
+     "kind": "circular",
+     "label": "Pathway viable"
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "kind": "ecosystem",
+   "state": {
+    "phase": 99,
+    "circular": "discovered",
+    "expanded": true
+   },
+   "caption": "New industrial opportunity discovered. Factory B emerges — the ecosystem expands.",
+   "level": 2,
+   "markers": [
+    {
+     "anchor": "factoryB",
+     "kind": "expansion",
+     "label": "Model this opportunity"
+    }
+   ]
+  }
+ ]
+}

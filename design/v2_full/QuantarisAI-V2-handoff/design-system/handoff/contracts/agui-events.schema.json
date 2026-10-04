@@ -1,0 +1,553 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "quantaris/agui-events.schema.json",
+ "title": "QuantarisAI workflow events (AG-UI style)",
+ "description": "Server → client event stream (SSE or WebSocket) for one scenario run. Events are application workflow states and results — never model chain-of-thought. The client applies scene patches to the level state and renders discoveries as markers.",
+ "$defs": {
+  "level": {
+   "enum": [
+    "map",
+    "ecosystem",
+    "factory"
+   ]
+  },
+  "scenePatch": {
+   "type": "object",
+   "required": [
+    "level",
+    "patch"
+   ],
+   "properties": {
+    "level": {
+     "$ref": "#/$defs/level"
+    },
+    "patch": {
+     "type": "object",
+     "description": "Partial MapState | EcosystemState | FactoryState (scene-state.schema.json)"
+    },
+    "camera": {
+     "enum": [
+      "stay",
+      "dive",
+      "rise"
+     ],
+     "default": "stay"
+    }
+   }
+  },
+  "evidence": {
+   "type": "object",
+   "required": [
+    "id",
+    "kind",
+    "claim"
+   ],
+   "properties": {
+    "id": {
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "fact",
+      "assumption",
+      "calculation",
+      "inference",
+      "simulation",
+      "recommendation"
+     ]
+    },
+    "claim": {
+     "type": "string"
+    },
+    "source": {
+     "type": "string"
+    },
+    "confidence": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "illustrative": {
+     "type": "boolean"
+    },
+    "inputs": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "ids of evidence this one is derived from (provenance graph)"
+    }
+   }
+  }
+ },
+ "oneOf": [
+  {
+   "title": "RUN_STARTED",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "mission"
+   ],
+   "properties": {
+    "type": {
+     "const": "RUN_STARTED"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "mission": {
+     "type": "string"
+    },
+    "steps": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "properties": {
+       "id": {
+        "enum": [
+         "understand_ambition",
+         "identify_materials",
+         "map_processes",
+         "discover_clusters",
+         "compare_locations",
+         "construct_factory",
+         "calculate_economics",
+         "simulate_environment",
+         "detect_waste",
+         "search_circular",
+         "discover_opportunities"
+        ]
+       },
+       "label": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "title": "STEP_STARTED",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "step",
+    "label"
+   ],
+   "properties": {
+    "type": {
+     "const": "STEP_STARTED"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "step": {
+     "enum": [
+      "understand_ambition",
+      "identify_materials",
+      "map_processes",
+      "discover_clusters",
+      "compare_locations",
+      "construct_factory",
+      "calculate_economics",
+      "simulate_environment",
+      "detect_waste",
+      "search_circular",
+      "discover_opportunities"
+     ]
+    },
+    "label": {
+     "type": "string"
+    },
+    "detail": {
+     "type": "string"
+    }
+   }
+  },
+  {
+   "title": "STEP_FINISHED",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "step",
+    "result"
+   ],
+   "properties": {
+    "type": {
+     "const": "STEP_FINISHED"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "step": {
+     "enum": [
+      "understand_ambition",
+      "identify_materials",
+      "map_processes",
+      "discover_clusters",
+      "compare_locations",
+      "construct_factory",
+      "calculate_economics",
+      "simulate_environment",
+      "detect_waste",
+      "search_circular",
+      "discover_opportunities"
+     ]
+    },
+    "result": {
+     "type": "string",
+     "maxLength": 80,
+     "description": "One mono line shown in ConstructionFeed"
+    },
+    "scene": {
+     "$ref": "#/$defs/scenePatch"
+    },
+    "metrics": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "number"
+     }
+    },
+    "evidence": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/evidence"
+     }
+    }
+   }
+  },
+  {
+   "title": "SCENE_PATCH",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "scene"
+   ],
+   "properties": {
+    "type": {
+     "const": "SCENE_PATCH"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "scene": {
+     "$ref": "#/$defs/scenePatch"
+    }
+   }
+  },
+  {
+   "title": "DISCOVERY",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "id",
+    "kind",
+    "anchor",
+    "title",
+    "evidence"
+   ],
+   "properties": {
+    "type": {
+     "const": "DISCOVERY"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "opportunity",
+      "constraint",
+      "bottleneck",
+      "simulation",
+      "improvement",
+      "circular",
+      "verify",
+      "risk",
+      "location",
+      "expansion",
+      "changed"
+     ]
+    },
+    "level": {
+     "$ref": "#/$defs/level"
+    },
+    "anchor": {
+     "type": "string",
+     "description": "Anchor id in the scene (see scene-state.schema.json#/$defs/anchors)"
+    },
+    "label": {
+     "type": "string",
+     "maxLength": 24
+    },
+    "metric": {
+     "type": "number"
+    },
+    "unit": {
+     "type": "string"
+    },
+    "title": {
+     "type": "string"
+    },
+    "body": {
+     "type": "string"
+    },
+    "evidence": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "minItems": 1
+    },
+    "evidenceKinds": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "fact",
+       "assumption",
+       "calculation",
+       "inference",
+       "simulation",
+       "recommendation"
+      ]
+     }
+    },
+    "confidence": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "actions": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "id",
+       "label"
+      ],
+      "properties": {
+       "id": {
+        "enum": [
+         "explore",
+         "model_opportunity",
+         "view_evidence",
+         "provide_value",
+         "keep_assumption",
+         "simulate",
+         "enter"
+        ]
+       },
+       "label": {
+        "type": "string"
+       }
+      }
+     }
+    },
+    "priority": {
+     "type": "integer",
+     "minimum": 1,
+     "maximum": 3
+    }
+   }
+  },
+  {
+   "title": "DISCOVERY_RESOLVED",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "id",
+    "resolution"
+   ],
+   "properties": {
+    "type": {
+     "const": "DISCOVERY_RESOLVED"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string"
+    },
+    "resolution": {
+     "enum": [
+      "accepted",
+      "dismissed",
+      "superseded"
+     ]
+    }
+   }
+  },
+  {
+   "title": "EVIDENCE",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "items"
+   ],
+   "properties": {
+    "type": {
+     "const": "EVIDENCE"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "subject": {
+     "type": "string",
+     "description": "metric or discovery id the items explain"
+    },
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/evidence"
+     }
+    }
+   }
+  },
+  {
+   "title": "SIMULATION_RESULT",
+   "type": "object",
+   "required": [
+    "type",
+    "simulationId",
+    "values",
+    "results"
+   ],
+   "properties": {
+    "type": {
+     "const": "SIMULATION_RESULT"
+    },
+    "simulationId": {
+     "type": "string"
+    },
+    "values": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "number"
+     }
+    },
+    "results": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "label",
+       "current",
+       "simulated"
+      ],
+      "properties": {
+       "label": {
+        "type": "string"
+       },
+       "current": {
+        "type": "number"
+       },
+       "simulated": {
+        "type": "number"
+       },
+       "unit": {
+        "type": "string"
+       },
+       "better": {
+        "enum": [
+         "lower",
+         "higher"
+        ]
+       }
+      }
+     }
+    },
+    "recommendation": {
+     "type": "object",
+     "properties": {
+      "text": {
+       "type": "string"
+      },
+      "changed": {
+       "type": "boolean"
+      }
+     }
+    },
+    "scene": {
+     "$ref": "#/$defs/scenePatch"
+    }
+   }
+  },
+  {
+   "title": "UI_REQUEST",
+   "$ref": "a2ui.schema.json"
+  },
+  {
+   "title": "RUN_FINISHED",
+   "type": "object",
+   "required": [
+    "type",
+    "runId"
+   ],
+   "properties": {
+    "type": {
+     "const": "RUN_FINISHED"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "summary": {
+     "type": "string"
+    }
+   }
+  },
+  {
+   "title": "RUN_ERROR",
+   "type": "object",
+   "required": [
+    "type",
+    "runId",
+    "message"
+   ],
+   "properties": {
+    "type": {
+     "const": "RUN_ERROR"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "step": {
+     "enum": [
+      "understand_ambition",
+      "identify_materials",
+      "map_processes",
+      "discover_clusters",
+      "compare_locations",
+      "construct_factory",
+      "calculate_economics",
+      "simulate_environment",
+      "detect_waste",
+      "search_circular",
+      "discover_opportunities"
+     ]
+    },
+    "message": {
+     "type": "string"
+    },
+    "recoverable": {
+     "type": "boolean"
+    },
+    "excluded": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Layers/data the result now excludes — shown in StateView error copy"
+    }
+   }
+  }
+ ]
+}

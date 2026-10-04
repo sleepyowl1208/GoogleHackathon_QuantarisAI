@@ -1,0 +1,97 @@
+QuantarisAI-V2-handoff/
+├── AGENTS.md   # Codex instructions — read first
+├── QuantarisAI-Design-System-V2.pdf   # visual overview (17 pages)
+├── FOLDER-TREE.txt
+└── design-system/
+    ├── assets/
+    │   ├── Logos/   # 5 SVG marks
+    │   │   ├── qai-app-icon.svg
+    │   │   ├── qai-mark-mono.svg
+    │   │   ├── qai-mark-reverse.svg
+    │   │   ├── qai-mark-small.svg
+    │   │   ├── qai-mark.svg
+    │   │   └── README.md
+    │   └── Scenes/   # 15 reference renders 3200×2000
+    │       ├── construction-1-supply.png
+    │       ├── construction-2-resources.png
+    │       ├── construction-3-complete.png
+    │       ├── ecosystem-expansion.png
+    │       ├── ecosystem-scene-dark.png
+    │       ├── ecosystem-scene.png
+    │       ├── factory-twin-dark.png
+    │       ├── factory-twin.png
+    │       ├── flow-circular.png
+    │       ├── flow-energy.png
+    │       ├── flow-material.png
+    │       ├── flow-waste.png
+    │       ├── flow-water.png
+    │       ├── india-intelligence-map-dark.png
+    │       ├── india-intelligence-map.png
+    │       └── README.md
+    ├── components/   # 25 components + 5 screens + cover
+    │   ├── AppNav/                   README.md + preview.html
+    │   ├── Button/                   README.md + preview.html
+    │   ├── ChakraRing/               README.md + preview.html
+    │   ├── CircularityPath/          README.md + preview.html
+    │   ├── ClarifyCard/              README.md + preview.html
+    │   ├── ConstructionFeed/         README.md + preview.html
+    │   ├── Cover/                    preview.html
+    │   ├── DiscoveryCard/            README.md + preview.html
+    │   ├── DiscoveryMarker/          README.md + preview.html
+    │   ├── EvidenceDrawer/           README.md + preview.html
+    │   ├── EvidenceTag/              README.md + preview.html
+    │   ├── ImpactBars/               README.md + preview.html
+    │   ├── LayerPanel/               README.md + preview.html
+    │   ├── LevelPath/                README.md + preview.html
+    │   ├── lib/   # three.js r128 + scene kit (reference)
+    │   │   ├── quantaris-scene.js
+    │   │   └── three.min.js
+    │   ├── Logo/                     README.md + preview.html
+    │   ├── MetricTile/               README.md + preview.html
+    │   ├── MissionComposer/          README.md + preview.html
+    │   ├── ProcessFlow/              README.md + preview.html
+    │   ├── ProcessInspector/         README.md + preview.html
+    │   ├── Scene3D/                  README.md + preview.html
+    │   ├── SceneLabel/               README.md + preview.html
+    │   ├── ScreenConstruction/       README.md + preview.html
+    │   ├── ScreenDemoWalkthrough/    README.md + preview.html
+    │   ├── ScreenEcosystem/          README.md + preview.html
+    │   ├── ScreenFactoryTwin/        README.md + preview.html
+    │   ├── ScreenIndiaMap/           README.md + preview.html
+    │   ├── SimulationPanel/          README.md + preview.html
+    │   ├── SiteMap/                  README.md + preview.html
+    │   ├── StageRail/                README.md + preview.html
+    │   ├── StateView/                README.md + preview.html
+    │   ├── StatusTag/                README.md + preview.html
+    │   ├── bundle.css   # component styles
+    │   ├── bundle.js   # reference React components
+    │   └── index.d.ts   # props contracts
+    ├── handoff/   # V2 implementation handoff — START HERE
+    │   ├── contracts/   # JSON Schema 2020-12
+    │   │   ├── a2ui.schema.json
+    │   │   ├── agui-events.schema.json
+    │   │   └── scene-state.schema.json
+    │   ├── fixtures/   # demo data — reproduces the screens
+    │   │   ├── agui-demo-run.json
+    │   │   ├── demo-walkthrough.json
+    │   │   └── scenario-tshirt-1m.json
+    │   ├── tokens/   # generated from tokens.json
+    │   │   ├── motion.json
+    │   │   ├── quantaris-tokens.css
+    │   │   └── theme.json
+    │   ├── 3d-asset-requirements.md   # renderer, materials, objects, budgets
+    │   ├── components.md   # inventory + layer per component
+    │   ├── implementation-plan.md   # stack, repo layout, milestones
+    │   ├── interactions.md   # trigger → result → event
+    │   ├── README.md   # Codex entry point + read order
+    │   ├── responsive.md   # breakpoints, sheets, WebGL fallback
+    │   └── screens.md   # 5 screens · STATIC / R3F / MAPS / AI per region
+    ├── ai-native-interaction.md   # construction, discovery, signature moment, A2UI
+    ├── data-and-evidence.md   # charts + evidence language
+    ├── design-system.json   # index: libraries, asset groups
+    ├── engineering-handoff.md   # summary → handoff/
+    ├── motion.md   # motion spec
+    ├── product-surfaces.md   # V1 surface rules
+    ├── README.md   # brand book
+    ├── spatial-intelligence.md   # 3 levels, scene + flow grammar
+    └── tokens.json   # design tokens — source of truth

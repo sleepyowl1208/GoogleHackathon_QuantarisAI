@@ -1,0 +1,12 @@
+<!-- @dsCard group="Factory" height=190 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ProcessFlow — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-pad"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Q.ProcessFlow,{nodes:[{id:'cot',label:'Cotton',meta:'1,450 t/yr'},{id:'spin',label:'Spinning',meta:'Ne 30s'},{id:'knit',label:'Knitting',meta:'jersey 160 gsm'},{id:'cut',label:'Cutting',meta:'15% scrap',tone:'current'},{id:'sew',label:'Sewing',meta:'2,740 / day'},{id:'tee',label:'T-shirt',meta:'1.0M / yr'}],branch:{from:'cut',nodes:[{label:'Cutting scrap',meta:'≈ 218 t/yr',tone:'waste'},{label:'Recovery',meta:'mech. recycling'},{label:'Recycled yarn',meta:'30% blend',tone:'positive'}]}}));
+</script>
+</body>
+</html>

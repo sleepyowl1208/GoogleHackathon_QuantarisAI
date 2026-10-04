@@ -1,0 +1,12 @@
+<!-- @dsCard group="Evidence" height=430 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>EvidenceDrawer — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" style="display:flex;justify-content:flex-end;background:var(--surface)"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Q.EvidenceDrawer,{title:'Fabric waste recovered · 312 t/yr',onClose:function(){},items:[{kind:'fact',claim:'Cutting floors in knitwear typically lose 15–20% of fabric as scrap.',source:'Illustrative reference · replace with cited study',confidence:0.8},{kind:'assumption',claim:'Recovery yield of 72% for mechanically recycled cotton fibre.',source:'Analyst input · v0.3',confidence:0.4},{kind:'calculation',claim:'1,450 t × 15% × 72% ≈ 157 t fibre; plus 155 t of off-cuts sold as filler.',source:'model/waste.py · L42',confidence:1},{kind:'simulation',claim:'Monte Carlo over yield 60–85%: P50 312 t, P90 268 t.',source:'scenario #A3 · 2,000 runs',confidence:0.7},{kind:'recommendation',claim:'Co-locate a recycling partner within 180 km of the cutting unit.',source:'QuantarisAI',confidence:0.6}]}));
+</script>
+</body>
+</html>

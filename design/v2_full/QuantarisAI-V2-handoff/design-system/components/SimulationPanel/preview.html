@@ -1,0 +1,18 @@
+<!-- @dsCard group="Simulation" height=470 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>SimulationPanel — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-pad" style="max-width:360px"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect;
+  var P=[{id:'ren',label:'Renewable energy',current:30,min:0,max:100,unit:'%'},{id:'vol',label:'Production volume',current:1000,min:100,max:2000,step:50,format:function(v){return (v/1000).toFixed(2).replace(/\.?0+$/,'')+'M / yr'}},{id:'elec',label:'Electricity price',current:7.8,min:4,max:12,step:0.1,format:function(v){return '₹'+v.toFixed(1)+' / kWh'}},{id:'rec',label:'Waste recovery',current:0,min:0,max:90,unit:'%'}];
+  function Demo(){ var s=useState({ren:70}); var v=s[0], ren=v.ren!=null?v.ren:30;
+    var co2=+(6.1*(1-(ren-30)/100*0.62)).toFixed(1);
+    return h(Q.SimulationPanel,{params:P,values:v,onChange:function(id,x){var n=Object.assign({},v);n[id]=x;s[1](n)},onReset:function(){s[1]({})},
+      results:[{label:'Emissions',current:6.1,simulated:co2,unit:'kt CO₂e'},{label:'Energy cost',current:4.2,simulated:+(4.2*(1-(ren-30)/100*0.21)).toFixed(2),unit:'₹ cr / yr'},{label:'Capex',current:48,simulated:+(48+(ren-30)*0.11).toFixed(1),unit:'₹ cr',better:'lower'}],
+      recommendation:ren>=60?{changed:true,text:'Recommendation changed: add 4 MW rooftop solar + 6 MW open-access wind (Muppandal).'}:{text:'Recommendation unchanged.'}}); }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+{
+ "$comment": "Illustrative demo data — not live. Replace with sourced values before external use. Ordered event stream for the AI Scenario Construction screen.",
+ "events": [
+  {
+   "type": "RUN_STARTED",
+   "runId": "r_demo_001",
+   "mission": "Design a sustainable manufacturing ecosystem for 1 million cotton T-shirts annually in India.",
+   "steps": [
+    {
+     "id": "understand_ambition",
+     "label": "Understanding industrial ambition"
+    },
+    {
+     "id": "identify_materials",
+     "label": "Identifying materials"
+    },
+    {
+     "id": "map_processes",
+     "label": "Mapping production processes"
+    },
+    {
+     "id": "discover_clusters",
+     "label": "Discovering industrial clusters"
+    },
+    {
+     "id": "compare_locations",
+     "label": "Comparing locations"
+    },
+    {
+     "id": "construct_factory",
+     "label": "Constructing factory"
+    },
+    {
+     "id": "calculate_economics",
+     "label": "Calculating economics"
+    },
+    {
+     "id": "simulate_environment",
+     "label": "Simulating environmental impact"
+    },
+    {
+     "id": "detect_waste",
+     "label": "Detecting waste"
+    },
+    {
+     "id": "search_circular",
+     "label": "Searching circular pathways"
+    },
+    {
+     "id": "discover_opportunities",
+     "label": "Discovering industrial opportunities"
+    }
+   ]
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "understand_ambition",
+   "label": "Understanding industrial ambition"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "understand_ambition",
+   "result": "1.0M cotton T-shirts / yr · India",
+   "scene": {
+    "level": "map",
+    "patch": {
+     "phase": 0
+    }
+   }
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "identify_materials",
+   "label": "Identifying materials"
+  },
+  {
+   "type": "UI_REQUEST",
+   "requestId": "q1",
+   "runId": "r_demo_001",
+   "component": "CapacitySelector",
+   "version": 1,
+   "reason": "Production capacity materially changes factory topology.",
+   "question": "How many T-shirts a year?",
+   "blocksSteps": [
+    "construct_factory"
+   ],
+   "props": {
+    "options": [
+     {
+      "value": "100k",
+      "label": "100K / yr"
+     },
+     {
+      "value": "500k",
+      "label": "500K / yr"
+     },
+     {
+      "value": "1m",
+      "label": "1M / yr",
+      "hint": "mission"
+     },
+     {
+      "value": "custom",
+      "label": "Custom"
+     },
+     {
+      "value": "auto",
+      "label": "Let Quantaris estimate",
+      "estimate": true
+     }
+    ],
+    "default": "1m",
+    "unit": "units_per_year"
+   }
+  },
+  {
+   "$comment": "client → server",
+   "type": "UI_RESPONSE",
+   "requestId": "q1",
+   "value": "1m"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "identify_materials",
+   "result": "cotton 30s yarn · reactive dyes · trims",
+   "scene": {
+    "level": "map",
+    "patch": {
+     "phase": 1
+    }
+   }
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "map_processes",
+   "label": "Mapping production processes"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "map_processes",
+   "result": "7 stages"
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "discover_clusters",
+   "label": "Discovering industrial clusters"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "discover_clusters",
+   "result": "14 clusters · 3 shortlisted",
+   "scene": {
+    "level": "map",
+    "patch": {
+     "phase": 2
+    }
+   }
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "compare_locations",
+   "label": "Comparing locations"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "compare_locations",
+   "result": "Tiruppur 0.86 · Surat 0.71 · Ludhiana 0.58",
+   "scene": {
+    "level": "map",
+    "patch": {
+     "phase": 3,
+     "scores": {
+      "tiruppur": 0.86,
+      "surat": 0.71,
+      "ludhiana": 0.58
+     }
+    }
+   }
+  },
+  {
+   "type": "DISCOVERY",
+   "runId": "r_demo_001",
+   "id": "d1",
+   "kind": "constraint",
+   "level": "map",
+   "anchor": "punjabwater",
+   "label": "Groundwater stress",
+   "title": "Ludhiana: groundwater stress",
+   "evidence": [
+    "ev_201"
+   ],
+   "evidenceKinds": [
+    "fact",
+    "calculation"
+   ],
+   "confidence": 0.8,
+   "priority": 2
+  },
+  {
+   "type": "SCENE_PATCH",
+   "runId": "r_demo_001",
+   "scene": {
+    "level": "map",
+    "patch": {
+     "phase": 5,
+     "recommended": "tiruppur"
+    }
+   }
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "construct_factory",
+   "label": "Constructing factory"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "construct_factory",
+   "result": "6 lines · 2,140 people",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "phase": 3
+    },
+    "camera": "dive"
+   }
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "calculate_economics",
+   "label": "Calculating economics"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "calculate_economics",
+   "result": "₹48 cr capex · 3.6 yr payback",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "phase": 6
+    }
+   }
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "simulate_environment",
+   "label": "Simulating environmental impact"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "simulate_environment",
+   "result": "6.1 kt CO₂e · 1,450 ML water",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "phase": 7
+    }
+   }
+  },
+  {
+   "type": "DISCOVERY",
+   "runId": "r_demo_001",
+   "id": "d3",
+   "kind": "improvement",
+   "level": "ecosystem",
+   "anchor": "energy",
+   "label": "−38% CO₂e possible",
+   "title": "70% renewable cuts emissions by 38%",
+   "evidence": [
+    "ev_221"
+   ],
+   "evidenceKinds": [
+    "simulation"
+   ],
+   "confidence": 0.7,
+   "priority": 3
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "detect_waste",
+   "label": "Detecting waste"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "detect_waste",
+   "result": "cutting offcuts 34 t / yr",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "phase": 8
+    }
+   },
+   "evidence": [
+    {
+     "id": "ev_311",
+     "kind": "fact",
+     "claim": "Knit cutting floors lose 12–18% of fabric as offcuts.",
+     "source": "Illustrative industry range · replace with cited study",
+     "confidence": 0.8,
+     "illustrative": true
+    },
+    {
+     "id": "ev_312",
+     "kind": "calculation",
+     "claim": "228 t fabric × 15% cutting loss ≈ 34 t offcuts a year.",
+     "source": "model/waste.py · cutting_loss()",
+     "confidence": 1,
+     "inputs": [
+      "ev_311"
+     ]
+    },
+    {
+     "id": "ev_313",
+     "kind": "assumption",
+     "claim": "72% of offcuts are clean single-fibre and recyclable.",
+     "source": "Analyst input · v0.3",
+     "confidence": 0.4
+    }
+   ]
+  },
+  {
+   "type": "DISCOVERY",
+   "runId": "r_demo_001",
+   "id": "d4",
+   "kind": "opportunity",
+   "level": "ecosystem",
+   "anchor": "waste",
+   "label": "34 t/yr recoverable",
+   "metric": 34,
+   "unit": "t / yr",
+   "title": "Recoverable cotton offcuts at Cutting",
+   "evidence": [
+    "ev_311",
+    "ev_312",
+    "ev_313"
+   ],
+   "evidenceKinds": [
+    "calculation",
+    "assumption"
+   ],
+   "confidence": 0.72,
+   "actions": [
+    {
+     "id": "explore",
+     "label": "Explore opportunity"
+    },
+    {
+     "id": "view_evidence",
+     "label": "View evidence"
+    }
+   ],
+   "priority": 1
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "search_circular",
+   "label": "Searching circular pathways"
+  },
+  {
+   "type": "SCENE_PATCH",
+   "runId": "r_demo_001",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "circular": "analysing"
+    }
+   }
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "search_circular",
+   "result": "1 viable of 4",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "circular": "discovered"
+    }
+   }
+  },
+  {
+   "type": "DISCOVERY",
+   "runId": "r_demo_001",
+   "id": "d6",
+   "kind": "circular",
+   "level": "ecosystem",
+   "anchor": "recycler",
+   "label": "Pathway viable",
+   "metric": 27,
+   "unit": "lakh / yr",
+   "title": "Offcuts → mechanical recycling → recycled fibre → 30% blend yarn",
+   "evidence": [
+    "ev_314",
+    "ev_315"
+   ],
+   "evidenceKinds": [
+    "simulation",
+    "calculation"
+   ],
+   "confidence": 0.68,
+   "actions": [
+    {
+     "id": "model_opportunity",
+     "label": "Model as new industrial opportunity"
+    },
+    {
+     "id": "view_evidence",
+     "label": "View evidence"
+    }
+   ],
+   "priority": 1
+  },
+  {
+   "type": "STEP_STARTED",
+   "runId": "r_demo_001",
+   "step": "discover_opportunities",
+   "label": "Discovering industrial opportunities"
+  },
+  {
+   "type": "STEP_FINISHED",
+   "runId": "r_demo_001",
+   "step": "discover_opportunities",
+   "result": "recycled-yarn mill"
+  },
+  {
+   "type": "RUN_FINISHED",
+   "runId": "r_demo_001",
+   "summary": "Tiruppur recommended · 1 circular pathway · 1 new industrial opportunity"
+  },
+  {
+   "$comment": "after the person selects 'Model as new industrial opportunity'",
+   "type": "SCENE_PATCH",
+   "runId": "r_demo_001",
+   "scene": {
+    "level": "ecosystem",
+    "patch": {
+     "expanded": true
+    }
+   }
+  }
+ ]
+}

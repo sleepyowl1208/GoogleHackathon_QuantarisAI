@@ -1,0 +1,18 @@
+<!-- @dsCard group="Spatial" height=560 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Scene3D — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-pad"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect;
+  var L = [['farms','Cotton farms','raw material'],['mill','Spinning mill','supplier'],['factory','Tiruppur knit unit','1.0M / yr'],['energy','Solar 4 MW','renewable'],['grid','Grid substation',''],['water','Water recovery','ETP + ZLD'],['workforce','Workforce','2,140 people'],['logistics','Thoothukudi port','export'],['waste','Cotton offcuts','34 t / yr']];
+  function Demo(){ var s=useState({phase:99,circular:'discovered',expanded:true,renewable:0.4});
+    return h(Q.Scene3D,{kind:'ecosystem',state:s[0],height:520,label:'Living industrial ecosystem'},
+      L.map(function(l){return h(Q.SceneLabel,{key:l[0],anchor:l[0],meta:l[2],tone:l[0]==='factory'?'selected':''},l[1])}),
+      h(Q.SceneLabel,{anchor:'recycler',tone:'positive',meta:'recycled fibre'},'Mechanical recycling'),
+      h(Q.SceneLabel,{anchor:'factoryB',tone:'positive',meta:'new node'},'Recycled-yarn mill')); }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script>
+</body>
+</html>

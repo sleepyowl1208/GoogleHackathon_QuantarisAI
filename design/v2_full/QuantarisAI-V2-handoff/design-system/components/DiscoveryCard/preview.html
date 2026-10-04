@@ -1,0 +1,15 @@
+<!-- @dsCard group="AI layer" height=300 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>DiscoveryCard — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-row qa-pad" style="align-items:flex-start"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment,null,
+ h(Q.DiscoveryCard,{kind:'opportunity',metric:'34',unit:'t / yr',title:'Recoverable cotton offcuts at Cutting',body:'Clean, single-fibre pre-consumer waste. Mechanical recycling within 180 km is viable.',evidence:['calculation','assumption'],confidence:0.72,actions:[{label:'Explore opportunity',icon:'✦'},{label:'View evidence'}]}),
+ h(Q.DiscoveryCard,{kind:'circular',eyebrow:'Circular pathway discovered',metric:'₹27',unit:'lakh / yr',title:'Offcuts → recycled fibre → 30% blend yarn',body:'Replaces 14% of virgin cotton; avoids 61 t CO₂e a year.',evidence:['simulation'],confidence:0.68,actions:[{label:'Model as new industrial opportunity',icon:'✦'},{label:'View evidence'}]}),
+ h(Q.DiscoveryCard,{kind:'verify',title:'Recovery yield assumed at 72%',body:'Results move ±₹6 lakh across 60–85%. Confirm with a recycler quote.',evidence:'assumption',actions:[{label:'Provide value',variant:'secondary'},{label:'Keep assumption'}]})));
+</script>
+</body>
+</html>

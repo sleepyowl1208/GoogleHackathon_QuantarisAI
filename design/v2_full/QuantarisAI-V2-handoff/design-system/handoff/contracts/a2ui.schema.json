@@ -1,0 +1,429 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "quantaris/a2ui.schema.json",
+ "title": "QuantarisAI A2UI — agent-requested UI (catalogue v1)",
+ "description": "Agents may only request APPROVED components from this catalogue. The frontend renders them inside ClarifyCard. Unknown component names or versions MUST be rejected (respond UI_REJECTED). Agents never send markup, code or styles.",
+ "$defs": {
+  "option": {
+   "type": "object",
+   "required": [
+    "value",
+    "label"
+   ],
+   "properties": {
+    "value": {
+     "type": "string"
+    },
+    "label": {
+     "type": "string"
+    },
+    "hint": {
+     "type": "string"
+    },
+    "estimate": {
+     "type": "boolean",
+     "description": "Marks the 'Let Quantaris estimate' option. Exactly one per request."
+    }
+   },
+   "additionalProperties": false
+  },
+  "CapacitySelector": {
+   "type": "object",
+   "required": [
+    "options"
+   ],
+   "properties": {
+    "options": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/option"
+     },
+     "minItems": 2
+    },
+    "default": {
+     "type": "string"
+    },
+    "unit": {
+     "const": "units_per_year"
+    }
+   },
+   "additionalProperties": false
+  },
+  "RegionSelector": {
+   "type": "object",
+   "required": [
+    "options"
+   ],
+   "properties": {
+    "options": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/option"
+     }
+    },
+    "multi": {
+     "type": "boolean",
+     "default": false
+    }
+   },
+   "additionalProperties": false
+  },
+  "MaterialSelector": {
+   "type": "object",
+   "required": [
+    "options"
+   ],
+   "properties": {
+    "options": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/option"
+     }
+    },
+    "allowBlend": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
+  "ConstraintSelector": {
+   "type": "object",
+   "required": [
+    "options"
+   ],
+   "properties": {
+    "options": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/option"
+     }
+    },
+    "limits": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "number"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "PrioritySelector": {
+   "type": "object",
+   "required": [
+    "options"
+   ],
+   "properties": {
+    "options": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/option"
+     },
+     "description": "cost, carbon, water, speed, circularity"
+    },
+    "rank": {
+     "type": "boolean",
+     "default": true
+    }
+   },
+   "additionalProperties": false
+  },
+  "ScenarioComparison": {
+   "type": "object",
+   "required": [
+    "scenarioIds"
+   ],
+   "properties": {
+    "scenarioIds": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "minItems": 2,
+     "maxItems": 4
+    },
+    "metrics": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "additionalProperties": false
+  },
+  "SimulationControls": {
+   "type": "object",
+   "required": [
+    "levers"
+   ],
+   "properties": {
+    "levers": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "id",
+       "label",
+       "current",
+       "min",
+       "max"
+      ],
+      "properties": {
+       "id": {
+        "enum": [
+         "volume",
+         "rawMaterialCost",
+         "electricityPrice",
+         "renewableShare",
+         "waterAvailability",
+         "workforceCost",
+         "transportDistance",
+         "machineCapacity",
+         "recyclingShare",
+         "wasteRecovery"
+        ]
+       },
+       "label": {
+        "type": "string"
+       },
+       "current": {
+        "type": "number"
+       },
+       "min": {
+        "type": "number"
+       },
+       "max": {
+        "type": "number"
+       },
+       "step": {
+        "type": "number"
+       },
+       "unit": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   },
+   "additionalProperties": false
+  }
+ },
+ "oneOf": [
+  {
+   "title": "UI_REQUEST",
+   "type": "object",
+   "required": [
+    "type",
+    "requestId",
+    "runId",
+    "component",
+    "version",
+    "reason",
+    "props"
+   ],
+   "properties": {
+    "type": {
+     "const": "UI_REQUEST"
+    },
+    "requestId": {
+     "type": "string"
+    },
+    "runId": {
+     "type": "string"
+    },
+    "component": {
+     "enum": [
+      "CapacitySelector",
+      "RegionSelector",
+      "MaterialSelector",
+      "ConstraintSelector",
+      "PrioritySelector",
+      "ScenarioComparison",
+      "SimulationControls"
+     ]
+    },
+    "version": {
+     "const": 1
+    },
+    "reason": {
+     "type": "string",
+     "maxLength": 140,
+     "description": "One sentence: why this decision materially changes the result."
+    },
+    "question": {
+     "type": "string",
+     "maxLength": 120
+    },
+    "blocksSteps": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "Workflow step ids paused until answered. Other steps continue."
+    },
+    "props": {
+     "type": "object"
+    }
+   },
+   "allOf": [
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "CapacitySelector"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/CapacitySelector"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "RegionSelector"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/RegionSelector"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "MaterialSelector"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/MaterialSelector"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "ConstraintSelector"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/ConstraintSelector"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "PrioritySelector"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/PrioritySelector"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "ScenarioComparison"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/ScenarioComparison"
+       }
+      }
+     }
+    },
+    {
+     "if": {
+      "properties": {
+       "component": {
+        "const": "SimulationControls"
+       }
+      }
+     },
+     "then": {
+      "properties": {
+       "props": {
+        "$ref": "#/$defs/SimulationControls"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "title": "UI_RESPONSE",
+   "type": "object",
+   "required": [
+    "type",
+    "requestId",
+    "value"
+   ],
+   "properties": {
+    "type": {
+     "const": "UI_RESPONSE"
+    },
+    "requestId": {
+     "type": "string"
+    },
+    "value": {},
+    "estimate": {
+     "type": "boolean",
+     "description": "true when the person chose 'Let Quantaris estimate' — the agent must record its estimate as an ASSUMPTION evidence item."
+    }
+   }
+  },
+  {
+   "title": "UI_REJECTED",
+   "type": "object",
+   "required": [
+    "type",
+    "requestId",
+    "reason"
+   ],
+   "properties": {
+    "type": {
+     "const": "UI_REJECTED"
+    },
+    "requestId": {
+     "type": "string"
+    },
+    "reason": {
+     "enum": [
+      "unknown_component",
+      "unsupported_version",
+      "invalid_props"
+     ]
+    }
+   }
+  }
+ ]
+}

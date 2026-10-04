@@ -1,0 +1,26 @@
+<!-- @dsCard group="Location" height=460 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>SiteMap — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-pad" style="max-width:440px"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Q.SiteMap,{sites:[
+ {id:'tir',name:'Tiruppur',lat:11.11,lon:77.34,kind:'candidate',selected:true,note:'knitwear cluster'},
+ {id:'lud',name:'Ludhiana',lat:30.9,lon:75.85,kind:'candidate'},
+ {id:'sur',name:'Surat',lat:21.17,lon:72.83,kind:'candidate'},
+ {id:'pan',name:'Panipat',lat:29.39,lon:76.97,kind:'cluster',note:'textile recycling'},
+ {id:'rjk',name:'Rajkot',lat:22.3,lon:70.8,kind:'raw',note:'cotton'},
+ {id:'ngp',name:'Nagpur',lat:21.15,lon:79.09,kind:'raw',note:'cotton'},
+ {id:'wgl',name:'Warangal',lat:17.97,lon:79.59,kind:'raw',note:'cotton'},
+  {id:'mun',name:'Mundra',lat:22.84,lon:69.72,kind:'port',label:false},
+ {id:'nhv',name:'Nhava Sheva',lat:18.95,lon:72.95,kind:'port'},
+ {id:'tut',name:'Thoothukudi',lat:8.76,lon:78.13,kind:'port'},
+ {id:'chn',name:'Chennai',lat:13.08,lon:80.29,kind:'port'},
+ {id:'kol',name:'Kolkata',lat:22.57,lon:88.36,kind:'port'},
+ {id:'del',name:'Delhi NCR',lat:28.61,lon:77.21,kind:'cluster',label:false}],
+links:[{from:'wgl',to:'tir',selected:true},{from:'tir',to:'tut',selected:true},{from:'tir',to:'chn'},{from:'rjk',to:'sur'},{from:'sur',to:'nhv'}]}));
+</script>
+</body>
+</html>

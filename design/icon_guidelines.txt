@@ -1,0 +1,100 @@
+Create a premium stylized 3D icon of a modern sustainable smart manufacturing factory.
+
+The factory should have:
+- a compact modern industrial building
+- one main production hall
+- subtle rooftop solar panels
+- a small loading area
+- a few visible industrial pipes/details
+- clean futuristic manufacturing architecture
+- rounded, slightly softened geometry
+- simple enough to remain readable at small UI sizes
+
+VISUAL STYLE:
+Premium enterprise 3D icon.
+Soft industrial miniature aesthetic.
+Polished polymer, ceramic and lightly metallic materials.
+Smooth beveled edges.
+Subtle depth and realistic material variation.
+Isometric three-quarter camera angle.
+Soft professional studio lighting.
+Subtle ambient occlusion.
+Clean silhouette.
+Sophisticated rather than cartoonish.
+Futuristic but believable.
+
+COLOR SYSTEM:
+
+Primary body:
+soft neutral silver-white / very light cool grey
+
+Structural details:
+deep navy / Ashoka-inspired blue
+
+Technology and intelligence accents:
+luminous cyan / ice blue
+
+Opportunity accent:
+very small amount of warm saffron
+
+Do NOT use green on this icon.
+Green is reserved for confirmed sustainability and circularity outcomes.
+
+IMPORTANT LIGHT/DARK MODE REQUIREMENT:
+
+The exact same 3D asset must work on both light and dark UI backgrounds.
+
+Therefore:
+- do not use a baked background
+- keep the object isolated
+- use balanced mid-tone edge definition
+- avoid large pure-white surfaces
+- avoid large pure-black surfaces
+- maintain visible separation around the silhouette
+- use subtle neutral rim definition
+- avoid shadows that depend on a specific background
+- lighting must remain readable against both #FFFFFF and deep navy backgrounds
+- transparent background where supported
+
+NO TEXT.
+NO LOGO.
+NO PEOPLE.
+NO SCENE BACKGROUND.
+NO GROUND ENVIRONMENT.
+NO excessive neon.
+NO cyberpunk aesthetic.
+NO cartoon face.
+NO Indian flag decoration.
+
+The result should feel like a premium 3D object belonging to an enterprise AI industrial-intelligence platform.
+
+COLOR PALETTE — STRICT:
+
+Use these colors as the visual targets:
+
+Physical body: #DCE3E8
+Highlight surfaces: #F4F7F8
+Structural / infrastructure details: #163A5F
+AI / technology elements: #55C7E8
+AI highlights: #9DE8F5
+Opportunity/action accent: #FF9933
+Circularity/sustainability success: #138808
+Deep mechanical details: #34424C
+
+For this Smart Factory icon:
+DO NOT use #138808.
+
+Green (#138808) is reserved exclusively for confirmed
+sustainability, recovery, circularity, or positive environmental outcomes.
+
+Use saffron (#FF9933) very sparingly — approximately 3–5% of the visible
+accent area.
+
+The dominant visual language should remain:
+silver + navy + cyan.
+
+The asset must remain readable on BOTH:
+light background: #F7F8FA
+dark background: #0B1424
+
+Do not bake either background into the asset.

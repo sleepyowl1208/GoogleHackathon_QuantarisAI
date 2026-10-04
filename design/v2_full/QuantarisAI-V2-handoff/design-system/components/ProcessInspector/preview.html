@@ -1,0 +1,14 @@
+<!-- @dsCard group="Factory" height=380 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ProcessInspector — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-pad"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Q.ProcessInspector,{onEvidence:function(){},onSimulate:function(){},process:{label:'Cutting',stage:'4 of 7',status:{tone:'opportunity',label:'Waste value found'},
+ metrics:[{label:'Capacity',value:'3,450',unit:'pcs / day',bar:0.82},{label:'Utilisation',value:'82%',bar:0.82},{label:'Cost',value:'₹4.10',unit:'/ pc'},{label:'Emissions',value:'0.21',unit:'t CO₂e / day'},{label:'Waste',value:'34',unit:'t / yr',tone:'waste',bar:0.15},{label:'Bottleneck',value:'No'}],
+ resources:[{kind:'material',label:'Fabric 0.63 t/day'},{kind:'energy',label:'Grid 410 kWh/day'},{kind:'waste',label:'Offcuts 15%'}]}}));
+</script>
+</body>
+</html>

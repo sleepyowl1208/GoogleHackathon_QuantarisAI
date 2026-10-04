@@ -1,0 +1,14 @@
+<!-- @dsCard group="Location" height=420 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>LayerPanel — preview</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style></style></head>
+<body>
+<div id="root" class="qa-pad"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect;
+  var L=[{id:'raw',label:'Raw materials',glyph:'◆',swatch:'raw',count:3},{id:'suppliers',label:'Suppliers',glyph:'■',count:41,disabled:true},{id:'cluster',label:'Industrial clusters',glyph:'●',swatch:'cluster',count:3},{id:'workforce',label:'Workforce',glyph:'⚇',disabled:true},{id:'energy',label:'Energy',glyph:'ϟ',swatch:'energy',disabled:true},{id:'renewable',label:'Renewable energy',glyph:'▦',swatch:'renewable',count:3},{id:'water',label:'Water',glyph:'≋',swatch:'water',disabled:true},{id:'logistics',label:'Logistics',glyph:'⌒',swatch:'logistics'},{id:'port',label:'Ports',glyph:'▲',swatch:'port',count:5},{id:'constraint',label:'Environmental constraints',glyph:'⚠',swatch:'constraint',count:2},{id:'waste',label:'Waste streams',glyph:'▪',swatch:'waste',disabled:true},{id:'circular',label:'Circularity opportunities',glyph:'♻',swatch:'circular',count:1}];
+  function Demo(){ var s=useState(['raw','cluster','renewable','logistics','port','constraint']); return h(Q.LayerPanel,{layers:L,active:s[0],onToggle:function(id){var a=s[0].slice(),i=a.indexOf(id);i>-1?a.splice(i,1):a.push(id);s[1](a)}}); }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script>
+</body>
+</html>

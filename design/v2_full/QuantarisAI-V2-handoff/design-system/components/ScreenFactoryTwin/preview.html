@@ -1,0 +1,49 @@
+<!-- @dsCard group="Screens" height=860 width=1440 page -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Generative Factory Twin</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style>html,body{margin:0;height:100%}</style></head>
+<body>
+<div id="root"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect, useRef = React.useRef;
+  var NAV = [{id:'command',label:'Command Center',index:'00'},{section:'Scenario · T-shirts 1M'},{id:'build',label:'Construction',index:'01'},{id:'map',label:'India Intelligence Map',index:'02'},{id:'eco',label:'Living Ecosystem',index:'03'},{id:'twin',label:'Factory Twin',index:'04'},{id:'impact',label:'Economics & Impact',index:'05'},{id:'circ',label:'Circularity',index:'06'},{section:'Library'},{id:'evidence',label:'Evidence',index:'Σ'}];
+  var ECO_LABELS = [['farms','Cotton farms','raw material'],['mill','Spinning mill','supplier'],['factory','Tiruppur knit unit','1.0M / yr'],['energy','Solar 4 MW','renewable'],['grid','Grid substation',''],['water','Water recovery','ETP + ZLD'],['workforce','Workforce','2,140 people'],['logistics','Thoothukudi port','export'],['waste','Cotton offcuts','34 t / yr']];
+  var ECO_ORDER = {farms:1,mill:2,factory:3,energy:4,grid:4,water:5,workforce:6,logistics:7,waste:8};
+  var MAP_LABELS = [['tiruppur','Tiruppur'],['surat','Surat'],['ludhiana','Ludhiana'],['warangal','Warangal cotton'],['rajkot','Saurashtra cotton'],['nagpur','Vidarbha cotton'],['tuticorin','Thoothukudi port'],['nhava','Nhava Sheva'],['pavagada','Pavagada solar'],['panipat','Panipat recycling']];
+  var PROC = {raw:['Raw materials','1 of 7'],knitting:['Knitting','2 of 7'],dyeing:['Dyeing','3 of 7'],cutting:['Cutting','4 of 7'],sewing:['Sewing','5 of 7'],finishing:['Finishing / QC','6 of 7'],product:['Product','7 of 7']};
+  function ecoLabels(ph, circular, expanded){ var out = ECO_LABELS.filter(function(l){ return (ECO_ORDER[l[0]]||0) <= ph; }).map(function(l){ return h(Q.SceneLabel,{key:l[0],anchor:l[0],meta:l[2],tone:l[0]==='factory'?'selected':''},l[1]); });
+    if (circular==='discovered'||expanded) out.push(h(Q.SceneLabel,{key:'rec',anchor:'recycler',tone:'positive',meta:'recycled fibre'},'Mechanical recycling'));
+    if (expanded) out.push(h(Q.SceneLabel,{key:'fb',anchor:'factoryB',tone:'positive',meta:'new node · 30% blend yarn'},'Recycled-yarn mill'));
+    return out; }
+  function mapLabels(ph, rec){ return MAP_LABELS.filter(function(l){ var k=QuantarisScene.SITES[l[0]].kind; return k==='candidate' ? ph>=2 : ph>=1; }).map(function(l){ var r = rec===l[0] && ph>=4; return h(Q.SceneLabel,{key:l[0],anchor:l[0],tone:r?'selected':(QuantarisScene.SITES[l[0]].kind==='candidate'?'':'muted'),meta:r?'recommended · 0.86':''},l[1]); }); }
+
+
+  var DATA={
+   raw:{status:{tone:'system',label:'Stocked 9 days'},m:[['Capacity','260','t / yr'],['Utilisation','—'],['Cost','₹212','/ kg'],['Emissions','1.9','kt CO₂e / yr'],['Waste','0.4','%'],['Bottleneck','No']]},
+   knitting:{status:{tone:'system',label:'Running'},m:[['Capacity','0.74','t / day',.71],['Utilisation','71%','',.71],['Cost','₹38','/ kg'],['Emissions','0.6','kt / yr'],['Waste','2','%',.02],['Bottleneck','No']]},
+   dyeing:{status:{tone:'assumption',label:'Water reuse assumed'},m:[['Capacity','0.72','t / day',.84],['Utilisation','84%','',.84],['Cost','₹61','/ kg'],['Emissions','2.4','kt / yr','risk'],['Water','1,450','ML / yr'],['Bottleneck','No']]},
+   cutting:{status:{tone:'opportunity',label:'Waste value found'},m:[['Capacity','3,450','pcs / day',.82],['Utilisation','82%','',.82],['Cost','₹4.10','/ pc'],['Emissions','0.2','kt / yr'],['Waste','34','t / yr',.15,'waste'],['Bottleneck','No']]},
+   sewing:{status:{tone:'risk',label:'Bottleneck'},m:[['Capacity','3,300','pcs / day',.96,'risk'],['Utilisation','96%','',.96,'risk'],['Cost','₹11.20','/ pc'],['Emissions','0.4','kt / yr'],['Waste','1','%'],['Bottleneck','Yes · −150 pcs/day','','','risk']]},
+   finishing:{status:{tone:'system',label:'Running'},m:[['Capacity','3,500','pcs / day',.78],['Utilisation','78%','',.78],['Cost','₹2.40','/ pc'],['Emissions','0.3','kt / yr'],['Waste','0.6','%'],['Bottleneck','No']]},
+   product:{status:{tone:'system',label:'Dispatch daily'},m:[['Output','3,300','pcs / day'],['Utilisation','—'],['Unit cost','₹96','/ pc'],['Emissions','6.1','kg / 1k pcs'],['Returns','0.8','%'],['Bottleneck','No']]}};
+  function App(){ var sel=useState('cutting'), ev=useState(false), circ=useState('none');
+    var d=DATA[sel[0]]||DATA.cutting, pr={label:PROC[sel[0]][0],stage:PROC[sel[0]][1],status:d.status,metrics:d.m.map(function(x){return {label:x[0],value:x[1],unit:x[2],bar:typeof x[3]==='number'?x[3]:null,tone:typeof x[3]==='string'?x[3]:x[4]}}),
+      resources:[{kind:'material',label:'Material in'},{kind:'energy',label:'Grid power'}].concat(sel[0]==='dyeing'?[{kind:'water',label:'Water + ETP'}]:[]).concat(sel[0]==='cutting'?[{kind:'waste',label:'Offcuts out'}]:[])};
+    var k=Object.keys(PROC).map(function(id){return h(Q.SceneLabel,{key:id,anchor:id,tone:id===sel[0]?'selected':''},PROC[id][0])});
+    k.push(h(Q.DiscoveryMarker,{key:'b',anchor:'workforce',kind:'bottleneck',label:'Sewing at 96%',onClick:function(){sel[1]('sewing')}}));
+    k.push(h(Q.DiscoveryMarker,{key:'o',anchor:'offcuts',kind:circ[0]==='discovered'?'circular':'opportunity',label:circ[0]==='discovered'?'Recovered → fibre':'34 t/yr recoverable',onClick:function(){sel[1]('cutting');circ[1]('discovered')}}));
+    if(circ[0]==='discovered') k.push(h(Q.SceneLabel,{key:'r',anchor:'recovery',tone:'positive',meta:'partner · 140 km'},'Fibre recovery'));
+    var evItems=[{kind:'fact',claim:'Knit cutting floors lose 12–18% of fabric as offcuts.',source:'Illustrative industry range · replace with cited study',confidence:0.8},{kind:'calculation',claim:'228 t fabric × 15% cutting loss ≈ 34 t offcuts a year.',source:'model/waste.py · cutting_loss()',confidence:1},{kind:'assumption',claim:'72% of offcuts are clean single-fibre and recyclable.',source:'Analyst input · v0.3',confidence:0.4},{kind:'recommendation',claim:'Contract a mechanical recycler within 180 km; return 30% blend yarn to the spinning mill.',source:'QuantarisAI',confidence:0.6}];
+    return h('div',{className:'qa-screen',style:{gridTemplateColumns:'224px 1fr'}},h(Q.AppNav,{active:'twin',items:NAV}),
+      h('main',null,h('div',{className:'bar'},h(Q.LevelPath,{current:sel[0]?4:3}),h('h1',null,'Tiruppur knit unit · Factory Twin'),h('span',{className:'sp'}),h(Q.Button,{size:'sm',icon:'◎'},'Simulate'),h(Q.Button,{size:'sm',variant:'ghost',icon:'Σ',onClick:function(){ev[1](!ev[0])}},'Evidence')),
+        h('div',{className:'work',style:{gridTemplateColumns:'1fr 300px'}},
+          h('div',{style:{position:'relative',minHeight:0}},h(Q.Scene3D,{kind:'factory',height:'100%',state:{phase:99,selected:sel[0],circular:circ[0]},onPick:function(id){ if(PROC[id]) sel[1](id); if(id==='offcuts') {sel[1]('cutting');circ[1]('discovered');} }},k),
+            ev[0]?h('div',{style:{position:'absolute',top:0,right:0,bottom:0,display:'flex'}},h(Q.EvidenceDrawer,{title:'Cutting · 34 t / yr recoverable',items:evItems,onClose:function(){ev[1](false)}})):null),
+          h('div',{className:'col'},h(Q.ProcessInspector,{process:pr,onEvidence:function(){ev[1](true)},onSimulate:function(){}}),
+            sel[0]==='sewing'?h(Q.DiscoveryCard,{kind:'bottleneck',title:'Sewing limits output to 3,300 pcs / day',body:'Adding 1 line (24 machines) lifts output to 3,450 and unlocks the 1.0M target.',evidence:['simulation','calculation'],confidence:0.75,actions:[{label:'Simulate +1 line',icon:'◎'},{label:'View evidence',onClick:function(){ev[1](true)}}]}) :
+            h(Q.DiscoveryCard,{kind:circ[0]==='discovered'?'circular':'opportunity',metric:'34',unit:'t / yr',title:circ[0]==='discovered'?'Offcuts now leave as recycled-fibre feedstock':'Cotton offcuts leave Cutting as waste',body:circ[0]==='discovered'?'Green path confirmed with a recycler 140 km away (illustrative).':'Select the offcut pile or explore to search recovery pathways.',evidence:['calculation','assumption'],confidence:0.72,actions:circ[0]==='discovered'?[{label:'View in ecosystem'},{label:'View evidence',onClick:function(){ev[1](true)}}]:[{label:'Explore opportunity',icon:'✦',onClick:function(){circ[1]('discovered')}},{label:'View evidence',onClick:function(){ev[1](true)}}]})))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

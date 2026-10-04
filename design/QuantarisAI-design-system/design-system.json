@@ -1,0 +1,80 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Logos": {
+      "files": {
+        "qai-app-icon.svg": {
+          "blob": "2623c00eaa66ff77b51009fa88e8338f",
+          "name": "qai-app-icon.svg",
+          "size": 1913,
+          "type": "image/svg+xml"
+        },
+        "qai-mark-mono.svg": {
+          "blob": "ab78a56104a69b2cd463d633f8f639e9",
+          "name": "qai-mark-mono.svg",
+          "size": 1806,
+          "type": "image/svg+xml"
+        },
+        "qai-mark-reverse.svg": {
+          "blob": "1f789e4fbc36b017fcf2c79c4ec619c7",
+          "name": "qai-mark-reverse.svg",
+          "size": 1806,
+          "type": "image/svg+xml"
+        },
+        "qai-mark-small.svg": {
+          "blob": "99dbe89bbcc73103c32f822f4b5949c0",
+          "name": "qai-mark-small.svg",
+          "size": 429,
+          "type": "image/svg+xml"
+        },
+        "qai-mark.svg": {
+          "blob": "43e0964e1cd43b291b9dc9bfc6a7fa6f",
+          "name": "qai-mark.svg",
+          "size": 1806,
+          "type": "image/svg+xml"
+        }
+      },
+      "name": "Logos",
+      "order": [
+        "qai-mark.svg",
+        "qai-mark-reverse.svg",
+        "qai-mark-mono.svg",
+        "qai-mark-small.svg",
+        "qai-app-icon.svg"
+      ],
+      "tile": "m"
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-04T17:56:46Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": []
+  },
+  "groups": [
+    "Logos"
+  ],
+  "lastChange": {
+    "at": "2026-10-04T17:56:46Z",
+    "by": "Krishna",
+    "note": "First system: India-inspired industrial brand, tokens, logo, 15 components, cover",
+    "via": "Claude (Cowork)"
+  },
+  "layout": "files",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    }
+  ],
+  "namespace": "Quantaris",
+  "sections": {},
+  "title": "QuantarisAI"
+}

@@ -1,0 +1,51 @@
+<!-- @dsCard group="Screens" height=860 width=1440 page -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>AI Scenario Construction</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"><style>html,body{margin:0;height:100%}</style></head>
+<body>
+<div id="root"></div>
+<script>
+  var Q = window.Quantaris, h = React.createElement, useState = React.useState, useEffect = React.useEffect, useRef = React.useRef;
+  var NAV = [{id:'command',label:'Command Center',index:'00'},{section:'Scenario · T-shirts 1M'},{id:'build',label:'Construction',index:'01'},{id:'map',label:'India Intelligence Map',index:'02'},{id:'eco',label:'Living Ecosystem',index:'03'},{id:'twin',label:'Factory Twin',index:'04'},{id:'impact',label:'Economics & Impact',index:'05'},{id:'circ',label:'Circularity',index:'06'},{section:'Library'},{id:'evidence',label:'Evidence',index:'Σ'}];
+  var ECO_LABELS = [['farms','Cotton farms','raw material'],['mill','Spinning mill','supplier'],['factory','Tiruppur knit unit','1.0M / yr'],['energy','Solar 4 MW','renewable'],['grid','Grid substation',''],['water','Water recovery','ETP + ZLD'],['workforce','Workforce','2,140 people'],['logistics','Thoothukudi port','export'],['waste','Cotton offcuts','34 t / yr']];
+  var ECO_ORDER = {farms:1,mill:2,factory:3,energy:4,grid:4,water:5,workforce:6,logistics:7,waste:8};
+  var MAP_LABELS = [['tiruppur','Tiruppur'],['surat','Surat'],['ludhiana','Ludhiana'],['warangal','Warangal cotton'],['rajkot','Saurashtra cotton'],['nagpur','Vidarbha cotton'],['tuticorin','Thoothukudi port'],['nhava','Nhava Sheva'],['pavagada','Pavagada solar'],['panipat','Panipat recycling']];
+  var PROC = {raw:['Raw materials','1 of 7'],knitting:['Knitting','2 of 7'],dyeing:['Dyeing','3 of 7'],cutting:['Cutting','4 of 7'],sewing:['Sewing','5 of 7'],finishing:['Finishing / QC','6 of 7'],product:['Product','7 of 7']};
+  function ecoLabels(ph, circular, expanded){ var out = ECO_LABELS.filter(function(l){ return (ECO_ORDER[l[0]]||0) <= ph; }).map(function(l){ return h(Q.SceneLabel,{key:l[0],anchor:l[0],meta:l[2],tone:l[0]==='factory'?'selected':''},l[1]); });
+    if (circular==='discovered'||expanded) out.push(h(Q.SceneLabel,{key:'rec',anchor:'recycler',tone:'positive',meta:'recycled fibre'},'Mechanical recycling'));
+    if (expanded) out.push(h(Q.SceneLabel,{key:'fb',anchor:'factoryB',tone:'positive',meta:'new node · 30% blend yarn'},'Recycled-yarn mill'));
+    return out; }
+  function mapLabels(ph, rec){ return MAP_LABELS.filter(function(l){ var k=QuantarisScene.SITES[l[0]].kind; return k==='candidate' ? ph>=2 : ph>=1; }).map(function(l){ var r = rec===l[0] && ph>=4; return h(Q.SceneLabel,{key:l[0],anchor:l[0],tone:r?'selected':(QuantarisScene.SITES[l[0]].kind==='candidate'?'':'muted'),meta:r?'recommended · 0.86':''},l[1]); }); }
+
+
+  var STEPS=[{label:'Understanding industrial ambition',result:'1.0M cotton T-shirts / yr · India'},{label:'Identifying materials',result:'cotton 30s yarn · reactive dyes · trims'},{label:'Mapping production processes',result:'7 stages'},{label:'Discovering industrial clusters',result:'14 clusters · 3 shortlisted'},{label:'Comparing locations',result:'Tiruppur 0.86 · Surat 0.71 · Ludhiana 0.58'},{label:'Constructing factory',result:'6 lines · 2,140 people'},{label:'Calculating economics',result:'₹48 cr capex · 3.6 yr payback'},{label:'Simulating environmental impact',result:'6.1 kt CO₂e · 1,450 ML water'},{label:'Detecting waste',result:'cutting offcuts 34 t / yr'},{label:'Searching circular pathways',result:'1 viable of 4'},{label:'Discovering industrial opportunities',result:'recycled-yarn mill'}];
+  function App(){
+    var st=useState(0), step=st[0], cap=useState(null), exp=useState(false), run=useState(0);
+    useEffect(function(){ if(step>=11) return; if(step===1 && !cap[0]){ var a=setTimeout(function(){cap[1]('1m')},2600); return function(){clearTimeout(a)}; }
+      var t=setTimeout(function(){ st[1](step+1); }, step===5?2600:1500); return function(){clearTimeout(t)}; },[step,cap[0],run[0]]);
+    var onMap = step<6 && !(step===5 && false), mapPh = [0,1,1,2,3,5][Math.min(step,5)];
+    var ecoPh = step<=5?3:step===6?6:step===7?7:8, circ = step>=10?'discovered':step===9?'analysing':'none';
+    var kind = step>=6 ? 'ecosystem' : 'map';
+    var state = kind==='map' ? {phase:mapPh} : {phase:ecoPh,circular:circ,expanded:exp[0],renewable:0.3};
+    var kids = kind==='map' ? mapLabels(mapPh,'tiruppur') : ecoLabels(ecoPh,circ,exp[0]);
+    if(kind==='ecosystem' && step>=7) kids.push(h(Q.DiscoveryMarker,{key:'imp',anchor:'energy',kind:'improvement',label:'−38% CO₂e possible'}));
+    if(kind==='ecosystem' && step>=8 && circ!=='discovered') kids.push(h(Q.DiscoveryMarker,{key:'w',anchor:'waste',kind:'opportunity',label:'34 t/yr recoverable'}));
+    if(kind==='map' && step>=4) kids.push(h(Q.DiscoveryMarker,{key:'c',anchor:'punjabwater',kind:'constraint',label:'Groundwater stress'}));
+    return h('div',{className:'qa-screen',style:{gridTemplateColumns:'224px 1fr'}},
+      h(Q.AppNav,{active:'build',items:NAV}),
+      h('main',null,
+        h('div',{className:'bar'},h(Q.LevelPath,{current:kind==='map'?0:2}),h('h1',null,'Constructing scenario'),h('span',{className:'sp'}),
+          h(Q.StatusTag,{tone:step>=11?'positive':'system'},step>=11?'Scenario ready':'Quantaris is building'),
+          h(Q.Button,{size:'sm',onClick:function(){st[1](0);cap[1](null);exp[1](false);run[1](run[0]+1)}},'↺ Replay')),
+        h('div',{className:'work',style:{gridTemplateColumns:'340px 1fr'}},
+          h('div',{className:'col'},
+            h('div',{className:'qa-panel qa-pad'},h('div',{className:'qa-eyebrow'},'Mission'),h('div',{style:{fontFamily:'var(--font-display)',fontSize:17,lineHeight:'24px',fontWeight:600,marginTop:6}},'Design a sustainable manufacturing ecosystem for 1 million cotton T-shirts annually in India.')),
+            h('div',{className:'qa-panel qa-pad'},h(Q.ConstructionFeed,{steps:STEPS,current:step}))),
+          h(Q.Scene3D,{kind:kind,state:state,height:'100%',label:'Scenario under construction'},kids,
+            step===1 && !cap[0] ? h('div',{style:{position:'absolute',left:16,top:16}},h(Q.ClarifyCard,{control:'CapacitySelector',reason:'Production capacity materially changes factory topology.',question:'How many T-shirts a year?',options:[{value:'100k',label:'100K / yr'},{value:'500k',label:'500K / yr'},{value:'1m',label:'1M / yr',hint:'mission'},{value:'custom',label:'Custom'},{value:'auto',label:'Let Quantaris estimate',estimate:true}],onSelect:function(v){cap[1](v)}})) : null,
+            step>=11 && !exp[0] ? h('div',{style:{position:'absolute',right:16,top:16}},h(Q.DiscoveryCard,{kind:'expansion',eyebrow:'New industrial opportunity discovered',metric:'₹27',unit:'lakh / yr',title:'Cotton offcuts → recycled fibre → 30% blend yarn',body:'A recycled-yarn mill within 180 km can absorb all 34 t / yr.',evidence:['calculation','simulation','assumption'],confidence:0.68,actions:[{label:'Model this opportunity',icon:'✦',onClick:function(){exp[1](true)}},{label:'View evidence'}]})) : null))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

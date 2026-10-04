@@ -1,0 +1,56 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>QuantarisAI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=IBM+Plex+Sans:wght@400&display=swap">
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--surface); color:var(--ink); font-family:var(--font-sans); overflow:hidden; }
+  .cover { position:relative; width:960px; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .navy { fill:var(--ashoka); }
+  .saffron { fill:var(--saffron); }
+  .blue { fill:var(--blue-2); }
+  .green { fill:var(--green); }
+  .blk { rx:var(--radius-md); }
+  .tag { rx:var(--radius-sm); }
+  .spoke { stroke:var(--saffron); stroke-width:4; stroke-linecap:round; }
+  .hubring { fill:none; stroke:var(--saffron); stroke-width:4; }
+  .words { position:absolute; left:var(--space-6); bottom:var(--space-6); max-width:440px; }
+  .name { margin:0; font-family:var(--font-display); font-size:64px; line-height:.95; font-weight:700; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; }
+  .tagline { margin:var(--space-3) 0 0 2px; font-size:14px; line-height:20px; color:var(--ink-muted); }
+</style>
+</head>
+<body>
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      ashoka 264×264 slab bleeding off top and right (the brand navy, largest) · saffron 112×120 (the primary accent) · blue-2 64×200 (system) · green 48×24 once (green only ever means a positive outcome) — ≈30% of 960×288
+  arrangement one tall navy slab with satellites stepping down to it, bottoms on one line space-6 above the edge, space-4 gutters
+  pattern     radial spokes at a 15° (24-part) pitch rising from the slab's corner, the Ashoka-Chakra geometry as structure — "the Chakra lives only as structure: 24 segments, 15° radial pitches"; 6 spokes + one quarter hub ring, in saffron over navy
+  scales      sides in space-2 multiples; gutters space-4; corners radius-md, the green tag radius-sm; spoke pitch 15°
+-->
+<rect class="blue blk" x="16" y="56" width="64" height="200" rx="6"/>
+<rect class="green tag" x="96" y="96" width="48" height="24" rx="4"/>
+<rect class="saffron blk" x="96" y="136" width="112" height="120" rx="6"/>
+<rect class="navy blk" x="224" y="-16" width="272" height="272" rx="6"/>
+<path class="hubring" d="M 224 200 A 56 56 0 0 1 280 256"/>
+<line class="spoke" x1="224.0" y1="168.0" x2="224.0" y2="72.0"/>
+<line class="spoke" x1="246.8" y1="171.0" x2="271.6" y2="78.3"/>
+<line class="spoke" x1="268.0" y1="179.8" x2="316.0" y2="96.7"/>
+<line class="spoke" x1="286.2" y1="193.8" x2="354.1" y2="125.9"/>
+<line class="spoke" x1="300.2" y1="212.0" x2="383.3" y2="164.0"/>
+<line class="spoke" x1="309.0" y1="233.2" x2="401.7" y2="208.4"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">QuantarisAI</h1>
+<p class="tagline">Industrial intelligence for sustainable manufacturing ecosystems.</p>
+</div>
+</div>
+</body>
+</html>

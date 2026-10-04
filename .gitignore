@@ -1,0 +1,29 @@
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+# Python tooling and virtual environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Generated TypeScript metadata
+*.tsbuildinfo
+
+# Environment files (commit documented templates only)
+.env
+.env.*
+!.env.example
+
+# Local editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.log

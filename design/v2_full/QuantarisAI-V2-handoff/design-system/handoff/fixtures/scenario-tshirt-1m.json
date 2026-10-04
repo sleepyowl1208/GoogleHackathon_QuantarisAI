@@ -1,0 +1,449 @@
+{
+ "$comment": "Illustrative demo data — not live. Replace with sourced values before external use.",
+ "id": "scn_tshirt_1m",
+ "mission": "Design a sustainable manufacturing ecosystem for 1 million cotton T-shirts annually in India.",
+ "params": {
+  "unitsPerYear": 1000000,
+  "region": "IN",
+  "horizonYears": 5,
+  "priority": "circularity"
+ },
+ "locations": [
+  {
+   "id": "tiruppur",
+   "name": "Tiruppur, TN",
+   "lat": 11.11,
+   "lon": 77.34,
+   "score": 0.86,
+   "recommended": true,
+   "why": "Knitwear cluster · 180 km to Thoothukudi · ZLD dyeing infra · wind + solar PPA"
+  },
+  {
+   "id": "surat",
+   "name": "Surat, GJ",
+   "lat": 21.17,
+   "lon": 72.83,
+   "score": 0.71,
+   "why": "Cotton belt + Nhava Sheva · weaker knitting base"
+  },
+  {
+   "id": "ludhiana",
+   "name": "Ludhiana, PB",
+   "lat": 30.9,
+   "lon": 75.85,
+   "score": 0.58,
+   "why": "Hosiery cluster · groundwater stress · 1,400 km to port"
+  }
+ ],
+ "mapSites": "see scene-state.schema.json#/$defs/anchors/map; coordinates in components/lib/quantaris-scene.js SITES",
+ "economics": {
+  "capexInrCrore": 48,
+  "paybackYears": 3.6,
+  "unitCostInr": 96,
+  "energyCostInrCrorePerYear": 4.2,
+  "marginPct": {
+   "baseline": 12,
+   "scenario": 15.5
+  }
+ },
+ "environment": {
+  "emissionsKtCO2e": {
+   "baseline": 9.8,
+   "scenario": 6.1
+  },
+  "waterML": {
+   "baseline": 2400,
+   "scenario": 1450
+  },
+  "landfillT": {
+   "baseline": 410,
+   "scenario": 92
+  },
+  "energyGWh": {
+   "baseline": 31,
+   "scenario": 34
+  }
+ },
+ "factory": {
+  "lines": 6,
+  "workforce": 2140,
+  "processes": [
+   {
+    "id": "raw",
+    "label": "Raw materials",
+    "stage": "1 of 7",
+    "status": {
+     "tone": "system",
+     "label": "Stocked 9 days"
+    },
+    "metrics": {
+     "capacity": "260 t / yr",
+     "utilisation": null,
+     "cost": "₹212 / kg",
+     "emissions": "1.9 kt CO₂e / yr",
+     "waste": "0.4 %",
+     "bottleneck": false
+    }
+   },
+   {
+    "id": "knitting",
+    "label": "Knitting",
+    "stage": "2 of 7",
+    "status": {
+     "tone": "system",
+     "label": "Running"
+    },
+    "metrics": {
+     "capacity": "0.74 t / day",
+     "utilisation": 0.71,
+     "cost": "₹38 / kg",
+     "emissions": "0.6 kt / yr",
+     "waste": "2 %",
+     "bottleneck": false
+    }
+   },
+   {
+    "id": "dyeing",
+    "label": "Dyeing",
+    "stage": "3 of 7",
+    "status": {
+     "tone": "assumption",
+     "label": "Water reuse assumed"
+    },
+    "metrics": {
+     "capacity": "0.72 t / day",
+     "utilisation": 0.84,
+     "cost": "₹61 / kg",
+     "emissions": "2.4 kt / yr",
+     "water": "1,450 ML / yr",
+     "bottleneck": false
+    }
+   },
+   {
+    "id": "cutting",
+    "label": "Cutting",
+    "stage": "4 of 7",
+    "status": {
+     "tone": "opportunity",
+     "label": "Waste value found"
+    },
+    "metrics": {
+     "capacity": "3,450 pcs / day",
+     "utilisation": 0.82,
+     "cost": "₹4.10 / pc",
+     "emissions": "0.2 kt / yr",
+     "waste": "34 t / yr",
+     "bottleneck": false
+    }
+   },
+   {
+    "id": "sewing",
+    "label": "Sewing",
+    "stage": "5 of 7",
+    "status": {
+     "tone": "risk",
+     "label": "Bottleneck"
+    },
+    "metrics": {
+     "capacity": "3,300 pcs / day",
+     "utilisation": 0.96,
+     "cost": "₹11.20 / pc",
+     "emissions": "0.4 kt / yr",
+     "waste": "1 %",
+     "bottleneck": "−150 pcs/day"
+    }
+   },
+   {
+    "id": "finishing",
+    "label": "Finishing / QC",
+    "stage": "6 of 7",
+    "status": {
+     "tone": "system",
+     "label": "Running"
+    },
+    "metrics": {
+     "capacity": "3,500 pcs / day",
+     "utilisation": 0.78,
+     "cost": "₹2.40 / pc",
+     "emissions": "0.3 kt / yr",
+     "waste": "0.6 %",
+     "bottleneck": false
+    }
+   },
+   {
+    "id": "product",
+    "label": "Product",
+    "stage": "7 of 7",
+    "status": {
+     "tone": "system",
+     "label": "Dispatch daily"
+    },
+    "metrics": {
+     "output": "3,300 pcs / day",
+     "unitCost": "₹96 / pc",
+     "returns": "0.8 %",
+     "bottleneck": false
+    }
+   }
+  ]
+ },
+ "waste": {
+  "stream": "cotton cutting offcuts",
+  "source": "cutting",
+  "fabricT": 228,
+  "cuttingLossPct": 15,
+  "offcutsTPerYear": 34,
+  "recoverablePct": 72
+ },
+ "circular": {
+  "pathway": [
+   "Cotton offcuts",
+   "Mechanical recycling",
+   "Recycled fibre",
+   "30% blend yarn",
+   "Spinning mill"
+  ],
+  "valueInrLakhPerYear": 27,
+  "virginCottonReplacedPct": 14,
+  "avoidedTCO2e": 61,
+  "partnerDistanceKm": 140,
+  "factoryB": {
+   "id": "factoryB",
+   "name": "Recycled-yarn mill",
+   "consumesTPerYear": 34
+  }
+ },
+ "simulation": {
+  "levers": [
+   {
+    "id": "renewableShare",
+    "label": "Renewable energy",
+    "current": 30,
+    "min": 0,
+    "max": 100,
+    "unit": "%"
+   },
+   {
+    "id": "wasteRecovery",
+    "label": "Waste recovery",
+    "current": 0,
+    "min": 0,
+    "max": 90,
+    "unit": "%"
+   },
+   {
+    "id": "electricityPrice",
+    "label": "Electricity price",
+    "current": 7.8,
+    "min": 4,
+    "max": 12,
+    "step": 0.1,
+    "unit": "₹/kWh"
+   },
+   {
+    "id": "volume",
+    "label": "Production volume",
+    "current": 1000000,
+    "min": 100000,
+    "max": 2000000,
+    "step": 50000,
+    "unit": "units/yr"
+   }
+  ],
+  "demoModel": {
+   "emissionsKt": "6.1 * (1 - (renewable - 30) / 100 * 0.62)",
+   "energyCostCrore": "4.2 * (1 - (renewable - 30) / 100 * 0.21)",
+   "capexCrore": "48 + (renewable - 30) * 0.11",
+   "recommendationFlipsAt": {
+    "renewable": 60,
+    "text": "Add 6 MW open-access wind (Muppandal) to the solar roof."
+   }
+  }
+ },
+ "discoveries": [
+  {
+   "id": "d1",
+   "kind": "constraint",
+   "level": "map",
+   "anchor": "punjabwater",
+   "label": "Groundwater stress",
+   "title": "Ludhiana: groundwater stress",
+   "body": "Dyeing needs ≈ 1,450 ML / yr. Punjab blocks are over-exploited; adds ₹2.3 cr / yr in water risk.",
+   "evidenceKinds": [
+    "fact",
+    "calculation"
+   ],
+   "confidence": 0.8
+  },
+  {
+   "id": "d2",
+   "kind": "verify",
+   "level": "map",
+   "anchor": "noyyal",
+   "label": "Effluent limit",
+   "title": "River effluent limits near Tiruppur",
+   "evidenceKinds": [
+    "assumption"
+   ]
+  },
+  {
+   "id": "d3",
+   "kind": "improvement",
+   "level": "ecosystem",
+   "anchor": "energy",
+   "label": "−38% CO₂e possible",
+   "evidenceKinds": [
+    "simulation"
+   ]
+  },
+  {
+   "id": "d4",
+   "kind": "opportunity",
+   "level": "ecosystem",
+   "anchor": "waste",
+   "label": "34 t/yr recoverable",
+   "metric": 34,
+   "unit": "t / yr",
+   "title": "Recoverable cotton offcuts at Cutting",
+   "body": "Clean pre-consumer waste currently sold as low-value filler or landfilled.",
+   "evidenceKinds": [
+    "calculation",
+    "assumption"
+   ],
+   "confidence": 0.72,
+   "actions": [
+    {
+     "id": "explore",
+     "label": "Explore opportunity"
+    },
+    {
+     "id": "view_evidence",
+     "label": "View evidence"
+    }
+   ]
+  },
+  {
+   "id": "d5",
+   "kind": "verify",
+   "level": "ecosystem",
+   "anchor": "water",
+   "label": "Reuse 40%?",
+   "title": "Water reuse assumed at 40%",
+   "evidenceKinds": [
+    "assumption"
+   ]
+  },
+  {
+   "id": "d6",
+   "kind": "circular",
+   "level": "ecosystem",
+   "anchor": "recycler",
+   "label": "Pathway viable",
+   "metric": 27,
+   "unit": "lakh / yr",
+   "title": "Offcuts → mechanical recycling → recycled fibre → 30% blend yarn",
+   "body": "Replaces 14% of virgin cotton and avoids 61 t CO₂e a year.",
+   "evidenceKinds": [
+    "simulation",
+    "calculation"
+   ],
+   "confidence": 0.68,
+   "actions": [
+    {
+     "id": "model_opportunity",
+     "label": "Model as new industrial opportunity"
+    },
+    {
+     "id": "view_evidence",
+     "label": "View evidence"
+    }
+   ]
+  },
+  {
+   "id": "d7",
+   "kind": "expansion",
+   "level": "ecosystem",
+   "anchor": "factoryB",
+   "label": "Model this opportunity",
+   "title": "Recycled-yarn mill added as Factory B",
+   "evidenceKinds": [
+    "simulation",
+    "recommendation"
+   ]
+  },
+  {
+   "id": "d8",
+   "kind": "bottleneck",
+   "level": "factory",
+   "anchor": "workforce",
+   "label": "Sewing at 96%",
+   "title": "Sewing limits output to 3,300 pcs / day",
+   "body": "Adding 1 line (24 machines) lifts output to 3,450 and unlocks the 1.0M target.",
+   "evidenceKinds": [
+    "simulation",
+    "calculation"
+   ],
+   "confidence": 0.75
+  },
+  {
+   "id": "d9",
+   "kind": "opportunity",
+   "level": "factory",
+   "anchor": "offcuts",
+   "label": "34 t/yr recoverable",
+   "evidenceKinds": [
+    "calculation",
+    "assumption"
+   ],
+   "confidence": 0.72
+  }
+ ],
+ "evidence": [
+  {
+   "id": "ev_311",
+   "kind": "fact",
+   "claim": "Knit cutting floors lose 12–18% of fabric as offcuts.",
+   "source": "Illustrative industry range · replace with cited study",
+   "confidence": 0.8,
+   "illustrative": true
+  },
+  {
+   "id": "ev_312",
+   "kind": "calculation",
+   "claim": "228 t fabric × 15% cutting loss ≈ 34 t offcuts a year.",
+   "source": "model/waste.py · cutting_loss()",
+   "confidence": 1,
+   "inputs": [
+    "ev_311"
+   ]
+  },
+  {
+   "id": "ev_313",
+   "kind": "assumption",
+   "claim": "72% of offcuts are clean single-fibre and recyclable.",
+   "source": "Analyst input · v0.3",
+   "confidence": 0.4
+  },
+  {
+   "id": "ev_314",
+   "kind": "simulation",
+   "claim": "Monte Carlo over yield 60–85%: P50 24.5 t fibre, P90 20.4 t.",
+   "source": "scenario #A3 · 2,000 runs",
+   "confidence": 0.7,
+   "inputs": [
+    "ev_312",
+    "ev_313"
+   ]
+  },
+  {
+   "id": "ev_315",
+   "kind": "recommendation",
+   "claim": "Contract a mechanical recycler within 180 km; return 30% blend yarn to the spinning mill.",
+   "source": "QuantarisAI",
+   "confidence": 0.6,
+   "inputs": [
+    "ev_314"
+   ]
+  }
+ ]
+}

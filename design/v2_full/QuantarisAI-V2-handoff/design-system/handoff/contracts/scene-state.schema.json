@@ -1,0 +1,235 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "quantaris/scene-state.schema.json",
+ "title": "QuantarisAI scene state (Scene3D)",
+ "description": "Declarative state for each level. The renderer animates from the previous state to the new one; never mutate scene objects imperatively.",
+ "$defs": {
+  "anchors": {
+   "description": "Named 3D anchors for overlays (SceneLabel, DiscoveryMarker) and onPick ids.",
+   "type": "object",
+   "properties": {
+    "map": {
+     "const": [
+      "tiruppur",
+      "surat",
+      "ludhiana",
+      "rajkot",
+      "nagpur",
+      "warangal",
+      "coimbatore",
+      "panipat",
+      "bhiwandi",
+      "mundra",
+      "nhava",
+      "tuticorin",
+      "chennai",
+      "kolkata",
+      "muppandal",
+      "bhadla",
+      "pavagada",
+      "punjabwater",
+      "noyyal"
+     ]
+    },
+    "ecosystem": {
+     "const": [
+      "farms",
+      "mill",
+      "factory",
+      "cutting",
+      "energy",
+      "grid",
+      "water",
+      "workforce",
+      "warehouse",
+      "logistics",
+      "waste",
+      "recycler",
+      "factoryB"
+     ]
+    },
+    "factory": {
+     "const": [
+      "raw",
+      "knitting",
+      "dyeing",
+      "cutting",
+      "sewing",
+      "finishing",
+      "product",
+      "offcuts",
+      "recovery",
+      "workforce"
+     ]
+    }
+   }
+  },
+  "MapState": {
+   "type": "object",
+   "properties": {
+    "phase": {
+     "type": "integer",
+     "minimum": 0,
+     "maximum": 5,
+     "description": "0 plinth \u00b7 1 raw/clusters/ports \u00b7 2 candidates \u00b7 3 compare (columns by score) \u00b7 4 recommend \u00b7 5 links"
+    },
+    "layers": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "raw",
+       "suppliers",
+       "cluster",
+       "workforce",
+       "energy",
+       "renewable",
+       "water",
+       "logistics",
+       "port",
+       "constraint",
+       "waste",
+       "circular"
+      ]
+     }
+    },
+    "scores": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+     }
+    },
+    "recommended": {
+     "type": "string"
+    },
+    "circular": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
+  "EcosystemState": {
+   "type": "object",
+   "properties": {
+    "phase": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "1 farms \u00b7 2 mill \u00b7 3 factory \u00b7 4 energy \u00b7 5 water \u00b7 6 workforce \u00b7 7 logistics \u00b7 8 waste (99 = all)"
+    },
+    "circular": {
+     "enum": [
+      "none",
+      "analysing",
+      "discovered"
+     ]
+    },
+    "expanded": {
+     "type": "boolean"
+    },
+    "renewable": {
+     "type": "number",
+     "minimum": 0,
+     "maximum": 1
+    },
+    "layers": {
+     "type": "array",
+     "items": {
+      "enum": [
+       "material",
+       "energy",
+       "water",
+       "workforce",
+       "waste",
+       "circular"
+      ]
+     }
+    },
+    "ghost": {
+     "type": "boolean"
+    },
+    "selected": {
+     "type": "boolean"
+    }
+   },
+   "additionalProperties": false
+  },
+  "FactoryState": {
+   "type": "object",
+   "properties": {
+    "phase": {
+     "type": "integer",
+     "minimum": 0,
+     "description": "1\u20137 zones in process order \u00b7 3 water + bus \u00b7 4 energy drops \u00b7 7 material flow \u00b7 8 waste (99 = all)"
+    },
+    "selected": {
+     "enum": [
+      "raw",
+      "knitting",
+      "dyeing",
+      "cutting",
+      "sewing",
+      "finishing",
+      "product",
+      null
+     ]
+    },
+    "circular": {
+     "enum": [
+      "none",
+      "analysing",
+      "discovered"
+     ]
+    }
+   },
+   "additionalProperties": false
+  },
+  "Scene3DProps": {
+   "type": "object",
+   "required": [
+    "kind"
+   ],
+   "properties": {
+    "kind": {
+     "enum": [
+      "map",
+      "ecosystem",
+      "factory"
+     ]
+    },
+    "state": {},
+    "mode": {
+     "enum": [
+      "current",
+      "simulated"
+     ]
+    },
+    "motion": {
+     "enum": [
+      "live",
+      "paused"
+     ]
+    },
+    "orbit": {
+     "type": "boolean",
+     "default": true
+    },
+    "illustrative": {
+     "type": "boolean",
+     "default": true
+    }
+   }
+  }
+ },
+ "oneOf": [
+  {
+   "$ref": "#/$defs/MapState"
+  },
+  {
+   "$ref": "#/$defs/EcosystemState"
+  },
+  {
+   "$ref": "#/$defs/FactoryState"
+  }
+ ]
+}
