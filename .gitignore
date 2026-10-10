@@ -27,3 +27,6 @@ venv/
 .idea/
 .vscode/
 *.log
+
+# Local lookup cache (geocoding results)
+.quantaris-cache/

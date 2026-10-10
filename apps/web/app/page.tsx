@@ -1,5 +1,3 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { AppShell } from "@/components/app-shell";
-export default function Home(){const [mission,setMission]=useState("Design a sustainable manufacturing ecosystem for 1 million cotton T-shirts annually in India.");const router=useRouter();return <AppShell><main className="content"><section className="mission"><p className="eyebrow">Command center / New mission</p><h1>Model the industrial system behind your ambition.</h1><p>QuantarisAI connects location, factory, resources, impact, waste and circular value into a decision-ready scenario.</p><form className="card composer" onSubmit={(event)=>{event.preventDefault();router.push("/scenarios/scn_tshirt_1m/construction");}}><label className="sr-only" htmlFor="mission">Industrial ambition</label><input id="mission" value={mission} onChange={(event)=>setMission(event.target.value)} /><button className="button saffron" type="submit">Construct</button></form><span className="illustrative">≈ Illustrative model · not live data</span></section></main></AppShell>}
+import { ChatApp } from "@/components/app/chat-app";
+
+export default function Home() { return <ChatApp />; }

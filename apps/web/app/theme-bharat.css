@@ -1,0 +1,158 @@
+/* Bharat theme. Light: flag saffron #FF9933, white and India green #138808 on warm cream.
+   Dark: deep navy surfaces (the Ashoka Chakra's blue) with saffron and green accents.
+   Loaded after the design tokens so it overrides them, using the same three selectors the token file uses so specificity stays equal. */
+
+:root, [data-theme="light"] {
+  --surface: #FFF8EE;
+  --surface-raised: #FFFFFF;
+  --surface-sunken: #FBEEDB;
+  --sidebar: #F0DDBF;
+  --sidebar-line: #DDC39B;
+  --line: #F0DEC6;
+  --line-strong: #A88A66;
+  --ink: #2A1A0C;
+  --ink-muted: #6B5238;
+  --ink-subtle: #7C6246;
+  --saffron: #FF9933;
+  --saffron-strong: #E8780C;
+  --saffron-ink: #A94F00;
+  --saffron-soft: #FFEBD2;
+  --on-saffron: #2A1A0C;
+  --ashoka: #2A1A0C;
+  --on-ashoka: #FFF4E6;
+  --nav-surface: #2A1A0C;
+  --nav-muted: #D9BE9C;
+  --blue: #138808;
+  --blue-2: #3FA34D;
+  --blue-soft: #E4F4E1;
+  --green: #138808;
+  --green-soft: #E4F4E1;
+  --on-green: #FFFFFF;
+  --amber: #8A5A00;
+  --amber-soft: #FDF0D2;
+  --red: #B42318;
+  --red-soft: #FBE7E4;
+  --grey: #9A8B78;
+  --focus: #E8780C;
+  --link: #A94F00;
+  --viz-system: var(--green);
+  --viz-system-2: var(--saffron-strong);
+  --scene-ground: #F0E4D0;
+  --scene-plinth: #DCCBB0;
+  --scene-building: #FFFDF8;
+  --scene-roof: #E8D9C0;
+  --scene-glass: #5C4A36;
+  --scene-machine: #7B6650;
+  --scene-field: #EBDDC4;
+  --scene-sea: #E2E8DC;
+  --flow-energy: var(--saffron-strong);
+  --flow-water: #2A8F8B;
+  --ai: var(--saffron-ink);
+  --simulated: var(--green);
+  --shadow-1: 0 1px 2px rgba(60,35,10,.08), 0 0 0 1px rgba(60,35,10,.05);
+  --shadow-2: 0 12px 32px rgba(60,35,10,.14), 0 1px 2px rgba(60,35,10,.08);
+}
+
+[data-theme="dark"] {
+  --surface: #0C1426;
+  --surface-raised: #131D36;
+  --surface-sunken: #080F1F;
+  --sidebar: #02050D;
+  --sidebar-line: #1B2A4A;
+  --line: #243557;
+  --line-strong: #5A6C93;
+  --ink: #EEF3FB;
+  --ink-muted: #AAB8D4;
+  --ink-subtle: #8392B0;
+  --saffron: #FFA84D;
+  --saffron-strong: #FFA84D;
+  --saffron-ink: #FFB866;
+  --saffron-soft: #1F2D54;
+  --on-saffron: #0C1426;
+  --ashoka: #1F3166;
+  --on-ashoka: #EEF3FB;
+  --nav-surface: #080F1F;
+  --nav-muted: #AAB8D4;
+  --blue: #6FCB6C;
+  --blue-2: #4DAF55;
+  --blue-soft: #16301F;
+  --green: #6FCB6C;
+  --green-soft: #16301F;
+  --on-green: #0C1426;
+  --amber: #F0C25A;
+  --amber-soft: #2C3252;
+  --red: #F28B7E;
+  --red-soft: #3F1C1E;
+  --grey: #8794AD;
+  --focus: #FFA84D;
+  --link: #FFB866;
+  --viz-system: var(--green);
+  --viz-system-2: var(--saffron-strong);
+  --scene-ground: #121C33;
+  --scene-plinth: #1C2A4A;
+  --scene-building: #26365C;
+  --scene-roof: #324670;
+  --scene-glass: #9DB0D8;
+  --scene-machine: #B3C0DA;
+  --scene-field: #1B2745;
+  --scene-sea: #0A1B33;
+  --flow-energy: var(--saffron-strong);
+  --flow-water: #5CC2BC;
+  --ai: var(--saffron-ink);
+  --simulated: var(--green);
+  --shadow-1: 0 1px 2px rgba(0,0,0,.5);
+  --shadow-2: 0 12px 32px rgba(0,0,0,.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #0C1426;
+    --surface-raised: #131D36;
+    --surface-sunken: #080F1F;
+  --sidebar: #02050D;
+  --sidebar-line: #1B2A4A;
+    --line: #243557;
+    --line-strong: #5A6C93;
+    --ink: #EEF3FB;
+    --ink-muted: #AAB8D4;
+    --ink-subtle: #8392B0;
+    --saffron: #FFA84D;
+    --saffron-strong: #FFA84D;
+    --saffron-ink: #FFB866;
+    --saffron-soft: #1F2D54;
+    --on-saffron: #0C1426;
+    --ashoka: #1F3166;
+    --on-ashoka: #EEF3FB;
+    --nav-surface: #080F1F;
+    --nav-muted: #AAB8D4;
+    --blue: #6FCB6C;
+    --blue-2: #4DAF55;
+    --blue-soft: #16301F;
+    --green: #6FCB6C;
+    --green-soft: #16301F;
+    --on-green: #0C1426;
+    --amber: #F0C25A;
+    --amber-soft: #2C3252;
+    --red: #F28B7E;
+    --red-soft: #3F1C1E;
+    --grey: #8794AD;
+    --focus: #FFA84D;
+    --link: #FFB866;
+    --viz-system: var(--green);
+    --viz-system-2: var(--saffron-strong);
+    --scene-ground: #121C33;
+    --scene-plinth: #1C2A4A;
+    --scene-building: #26365C;
+    --scene-roof: #324670;
+    --scene-glass: #9DB0D8;
+    --scene-machine: #B3C0DA;
+    --scene-field: #1B2745;
+    --scene-sea: #0A1B33;
+    --flow-energy: var(--saffron-strong);
+    --flow-water: #5CC2BC;
+    --ai: var(--saffron-ink);
+    --simulated: var(--green);
+    --shadow-1: 0 1px 2px rgba(0,0,0,.5);
+    --shadow-2: 0 12px 32px rgba(0,0,0,.6);
+  }
+}

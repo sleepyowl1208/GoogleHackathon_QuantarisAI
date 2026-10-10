@@ -1,6 +1,6 @@
 import { A2uiRequestSchema, type A2uiRequest } from "./contracts";
 
-export const A2UI_CATALOG = new Set(["CapacitySelector", "RegionSelector", "MaterialSelector", "ConstraintSelector", "PrioritySelector", "ScenarioComparison", "SimulationControls"]);
+export const A2UI_CATALOG = new Set(["CapacitySelector", "ClarificationSelector", "RegionSelector", "MaterialSelector", "ConstraintSelector", "PrioritySelector", "ScenarioComparison", "SimulationControls"]);
 export type A2uiValidation = { ok: true; request: A2uiRequest } | { ok: false; code: "unknown_component" | "unsupported_version" | "invalid_props"; message: string };
 export function validateA2uiRequest(value: unknown): A2uiValidation {
   const preliminary = value as { component?: string; version?: number };

@@ -1,0 +1,3 @@
+# Same packages as the project root. Run the server from the project root, not from here:
+#   cd ../.. && .venv/bin/python -m uvicorn apps.api.main:app --port 8000
+-r ../../requirements.txt

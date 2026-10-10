@@ -4,7 +4,7 @@ import { validateA2uiRequest } from "./a2ui";
 export type SceneState = { map: Record<string, unknown>; ecosystem: Record<string, unknown>; factory: Record<string, unknown> };
 export type Discovery = { id: string; kind: string; anchor: string; title: string; body?: string; evidence: string[]; level?: string; label?: string };
 export type RunState = { status: "idle" | "running" | "complete" | "error"; runId?: string; mission?: string; activeStep?: string; feed: string[]; scene: SceneState; discoveries: Discovery[]; evidence: Map<string, ReturnType<typeof EvidenceSchema.parse>>; request?: A2uiRequest; error?: string };
-export const initialRunState: RunState = { status: "idle", feed: [], scene: { map: { phase: 0 }, ecosystem: { phase: 1, circular: "none", renewable: 0.3 }, factory: { phase: 1, circular: "none", selected: null } }, discoveries: [], evidence: new Map() };
+export const initialRunState: RunState = { status: "idle", feed: [], scene: { map: { phase: 5, recommended: "tiruppur", circular: true }, ecosystem: { phase: 99, circular: "discovered", renewable: 0.3, layers:["material","energy","water","waste","circular"] }, factory: { phase: 99, circular: "discovered", selected: "cutting" } }, discoveries: [], evidence: new Map() };
 function patchScene(state: RunState, scene: { level: "map" | "ecosystem" | "factory"; patch: Record<string, unknown> }) { return { ...state.scene, [scene.level]: { ...state.scene[scene.level], ...scene.patch } }; }
 export function reduceEvent(state: RunState, input: unknown): RunState {
   const parsed = AguiEventSchema.safeParse(input); if (!parsed.success) return { ...state, status: "error", error: `Invalid fixture event: ${parsed.error.issues[0]?.message ?? "unknown error"}` };

@@ -32,13 +32,15 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 3
 .stage-rail { display:flex; overflow:auto; gap:var(--space-2); border-bottom:1px solid var(--line); padding-bottom:var(--space-3); margin-bottom:var(--space-4); }
 .stage-rail a { white-space:nowrap; color:var(--ink-muted); text-decoration:none; font-size:13px; padding:6px 8px; border-bottom:2px solid transparent; }
 .stage-rail a:hover { color:var(--blue); border-color:var(--blue); }
-.workspace { display:grid; grid-template-columns:minmax(280px,340px) minmax(0,1fr); gap:var(--space-4); }
+.workspace { display:grid; grid-template-columns:minmax(280px,340px) minmax(0,1fr); gap:var(--space-4); align-items:stretch; }.workspace > section { min-width:0; min-height:0; }
 .panel { padding:var(--space-4); }
 .feed { display:grid; gap:var(--space-3); max-height:60vh; overflow:auto; }
 .feed-item { border-left:2px solid var(--blue); padding-left:var(--space-3); color:var(--ink-muted); font:12px/1.45 var(--font-mono); }
-.scene { min-height:560px; position:relative; overflow:hidden; background:var(--scene-ground); }
-.scene canvas { position:absolute!important; inset:0; }
-.scene-overlay { position:relative; pointer-events:none; padding:var(--space-4); display:flex; justify-content:space-between; align-items:flex-start; }
+.scene { height:clamp(460px,62vh,720px); min-height:460px; width:100%; position:relative; overflow:hidden; background:var(--scene-ground); }
+.scene canvas { position:absolute!important; top:0; right:0; bottom:0; left:0; display:block!important; width:100%!important; height:100%!important; min-height:100%!important; }
+.scene-fallback { position:absolute; inset:0; z-index:1; overflow:auto; }.scene-fallback img { display:block; width:100%; height:auto; max-height:72%; object-fit:contain; }
+.scene-initializing { position:absolute; inset:0; z-index:1; display:grid; place-items:center; color:var(--ink-muted); font:12px var(--font-mono); }
+.scene-overlay { position:relative; z-index:2; pointer-events:none; padding:var(--space-4); display:flex; justify-content:space-between; align-items:flex-start; }
 .scene-chip { background:color-mix(in srgb,var(--surface-raised) 92%,transparent); border:1px solid var(--line); border-radius:var(--radius-sm); padding:8px; color:var(--ink); font-size:12px; }
 .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-3); }
 .metric { padding:var(--space-3); }
