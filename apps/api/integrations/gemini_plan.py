@@ -16,6 +16,8 @@ SYSTEM = (
     "waste_streams must be the real solid, liquid or gas waste this industry produces, each with by_product_ideas that are plausible but described as ideas, not guarantees. "
     "environment lists up to five consequences (air, water, land, noise, energy) each with a mitigation, and may include one item pointing out which pollution-control consent the unit may need, as something to check, not legal advice. "
     "utilities should name the main water and energy needs in words only, without invented numbers. "
+    "raw_inputs: list the main raw material FIRST, then other inputs. They are what physically ARRIVE at the gate, exactly as it is harvested or bought, whole and unprocessed (for example whole pineapples, raw milk, scrap steel, coconut husks, raw cotton). It is never a cut, peeled, grated, washed or otherwise processed form: every peeling, cutting, grating, crushing and washing is a stage INSIDE the plant, so the first stage receives and grades the raw input as it arrived. "
+    "products: what leaves the dispatch dock, finished and packed. farm_crop: if the raw material is a crop the owner grows or could grow on a small farm next to the plant (pineapple, mango, coconut, sugarcane, wheat, paddy, tea, cotton, tomato, banana and so on), give the crop as one or two words, otherwise an empty string. "
     "suggested_plot is a realistic land footprint in metres for a small-to-medium unit of this industry, with one sentence of reasoning. "
     "location is the place the user named, or an empty string if none."
 )
@@ -36,6 +38,7 @@ def _schema() -> dict:
             "waste_streams": {"type": "ARRAY", "items": {"type": "OBJECT", "required": ["name"], "properties": {"name": text, "description": text, "by_product_ideas": {"type": "ARRAY", "items": text}}}},
             "environment": {"type": "ARRAY", "items": {"type": "OBJECT", "required": ["aspect", "impact"], "properties": {"aspect": text, "impact": text, "mitigation": text}}},
             "utilities": {"type": "ARRAY", "items": text},
+            "raw_inputs": {"type": "ARRAY", "items": text}, "products": {"type": "ARRAY", "items": text}, "farm_crop": text,
         },
     }
 

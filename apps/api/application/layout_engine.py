@@ -46,6 +46,9 @@ class Template:
     utilities: tuple[str, ...] = ()
     location: str | None = None
     environment: tuple[EnvironmentNote, ...] = ()
+    raw_inputs: tuple[str, ...] = ()
+    products: tuple[str, ...] = ()
+    farm_crop: str = ""
 
 
 TEMPLATES: dict[Industry, Template] = {
@@ -204,4 +207,4 @@ def build_layout(template: Template, industry_key: str, width_m: float | None, d
     if not fits:
         claims.append(_claim(f"This plot ({plot_area:,.0f} m2) is smaller than the illustrative minimum of {template.min_area_m2:,.0f} m2 for this industry, so zones are compressed and may not be practical.", ClaimClassification.INFERENCE, confidence=0.4, reason="Based on an illustrative minimum area"))
 
-    return LayoutResult(industry=industry_key, label=template.label, width_m=width, depth_m=depth, size_was_suggested=suggested, fits=fits, zones=zones, flow=flow, entry=entry, exit=exit_, claims=claims, location=template.location, waste_streams=list(template.waste_streams), utilities=list(template.utilities), environment=list(template.environment), drafted_by=template.origin, levels=2 if upper else 1)
+    return LayoutResult(industry=industry_key, label=template.label, width_m=width, depth_m=depth, size_was_suggested=suggested, fits=fits, zones=zones, flow=flow, entry=entry, exit=exit_, claims=claims, location=template.location, waste_streams=list(template.waste_streams), utilities=list(template.utilities), environment=list(template.environment), drafted_by=template.origin, levels=2 if upper else 1, raw_inputs=list(template.raw_inputs), products=list(template.products), farm_crop=template.farm_crop)

@@ -10,6 +10,12 @@ describe("material kit", () => {
     expect(kitFor("Something Unusual").raw.shape).toBe("box");
   });
   it("coconut oil mill is not mistaken for a flour sack plant before coconut", () => { expect(kitFor("Coconut oil mill").raw.shape).toBe("egg"); });
+  it("the declared raw input and product beat a step's output, so processed forms are never shown entering", () => {
+    const zones = [{ step: 1, kind: "receive", label: "Fruit intake", outputs: ["Graded whole pineapples"] }, { step: 5, kind: "pack", label: "Canning", outputs: ["Sealed cans"] }];
+    expect(flowNames(zones, { raw_inputs: ["whole pineapples"], products: ["Canned pineapple rings"] })).toEqual({ raw: "Whole pineapples", product: "Canned pineapple rings" });
+    expect(flowNames(zones, { raw_inputs: [], products: [] }).raw).toBe("Graded whole pineapples");
+  });
+  it("pineapple gets its own look, not a generic fruit", () => { expect(kitFor("Pineapple Processing and Canning").raw.shape).toBe("pineapple"); });
   it("material changes form as it passes steps", () => {
     expect(formIndexAfter("receive")).toBe(0); expect(formIndexAfter("process")).toBe(1); expect(formIndexAfter("pack")).toBe(2); expect(formIndexAfter("dispatch")).toBe(2);
   });

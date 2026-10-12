@@ -81,7 +81,7 @@ class EditAgent:
         service = next((z for z in d.zones if z.step is None and z.kind is ZoneKind.OFFICE), None)
         side = downwind_side(request.wind_from_deg) if request.wind_from_deg is not None else ("west" if service and service.x + service.width_m / 2 < d.width_m / 2 else "east")
         template = Template(label=d.label, suggested=(d.width_m, d.depth_m), min_area_m2=0.35 * d.width_m * d.depth_m, stages=tuple(stages), by_product_ideas=(), waste_notes=(), origin="ai",
-                            waste_streams=tuple(d.waste_streams), utilities=tuple(d.utilities), location=d.location, environment=tuple(d.environment))
+                            waste_streams=tuple(d.waste_streams), utilities=tuple(d.utilities), location=d.location, environment=tuple(d.environment), raw_inputs=tuple(d.raw_inputs), products=tuple(d.products), farm_crop=d.farm_crop)
         new = build_layout(template, d.industry, d.width_m, d.depth_m, d.size_was_suggested, downwind=side, solar_kwh_m2_day=request.solar_kwh_m2_day)
         new.claims[:0] = [c for c in d.claims if c.statement.startswith("Measured wind")]  # the wind finding still holds for this site
         valid = {s.key for s in stages}

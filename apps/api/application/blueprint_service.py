@@ -63,6 +63,7 @@ class BlueprintService:
             waste_streams=tuple(WasteStream(name=w.name, description=w.description, by_product_ideas=w.by_product_ideas) for w in plan.waste_streams),
             utilities=tuple(plan.utilities), location=plan.location or None,
             environment=tuple(EnvironmentNote(aspect=e.aspect, impact=e.impact, mitigation=e.mitigation) for e in plan.environment),
+            raw_inputs=tuple(plan.raw_inputs), products=tuple(plan.products), farm_crop=plan.farm_crop,
         )
         site = locate(plan.location) if locate else None  # measured conditions at the place the plan is for, if we can find them
         wind = site.prevailing_wind_from_deg if site else None

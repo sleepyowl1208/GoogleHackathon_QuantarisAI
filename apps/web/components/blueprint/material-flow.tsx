@@ -7,10 +7,11 @@ import { flowNames, formIndexAfter, kitFor, type Form } from "@/lib/material-kit
 
 const LOOP_SECONDS = 34;
 
-function Piece({ form, s }: { form: Form; s: number }) {
+export function Piece({ form, s }: { form: Form; s: number }) {
   const [w, h, d] = form.size.map((n) => n * s) as [number, number, number];
   const accent = form.accent;
   switch (form.shape) {
+    case "pineapple": return <group><mesh position={[0, h * 0.4, 0]} scale={[1, 1.25, 1]}><sphereGeometry args={[w / 2, 10, 8]} /><meshStandardMaterial color={form.color} roughness={0.7} /></mesh>{[0, 1, 2, 3].map((k) => <mesh key={k} position={[Math.sin((k * Math.PI) / 2) * w * 0.12, h * 0.95, Math.cos((k * Math.PI) / 2) * w * 0.12]} rotation={[Math.cos((k * Math.PI) / 2) * 0.3, 0, -Math.sin((k * Math.PI) / 2) * 0.3]}><coneGeometry args={[w * 0.1, h * 0.45, 5]} /><meshStandardMaterial color={accent ?? "#3E7C2F"} /></mesh>)}</group>;
     case "sphere": return <mesh position={[0, h / 2, 0]}><sphereGeometry args={[w / 2, 10, 8]} /><meshStandardMaterial color={form.color} roughness={0.6} /></mesh>;
     case "egg": return <mesh position={[0, h / 2, 0]} scale={[1, 1.25, 1]}><sphereGeometry args={[w / 2, 10, 8]} /><meshStandardMaterial color={form.color} roughness={0.7} /></mesh>;
     case "cylinder": return <group><mesh position={[0, h / 2, 0]}><cylinderGeometry args={[w / 2, w / 2, h, 12]} /><meshStandardMaterial color={form.color} metalness={0.2} roughness={0.5} /></mesh>{accent ? <mesh position={[0, h, 0]}><cylinderGeometry args={[w / 2.3, w / 2.3, h * 0.12, 12]} /><meshStandardMaterial color={accent} /></mesh> : null}</group>;
@@ -22,7 +23,7 @@ function Piece({ form, s }: { form: Form; s: number }) {
 }
 
 /** A sprite label that stays readable from any angle. */
-function Tag({ text, position, size, tone }: { text: string; position: [number, number, number]; size: number; tone: "in" | "out" | "by" }) {
+export function Tag({ text, position, size, tone }: { text: string; position: [number, number, number]; size: number; tone: "in" | "out" | "by" }) {
   const { texture, aspect } = useMemo(() => {
     const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d")!;
     ctx.font = "700 40px sans-serif";
@@ -42,7 +43,7 @@ export function MaterialFlow({ layout, reach, byproductName }: { layout: LayoutR
   const { width_m: W, depth_m: D } = layout;
   const s = Math.max(1.4, reach / 24); // pieces are drawn large enough to read from the overview camera
   const kit = useMemo(() => kitFor(`${layout.industry} ${layout.label}`), [layout.industry, layout.label]);
-  const names = useMemo(() => flowNames(layout.zones), [layout.zones]);
+  const names = useMemo(() => flowNames(layout.zones, layout), [layout]);
   const to3 = (x: number, y: number, h: number) => new Vector3(x - W / 2, h, -(y - D / 2));
   const model = useMemo(() => {
     if (!layout.flow.length) return undefined;

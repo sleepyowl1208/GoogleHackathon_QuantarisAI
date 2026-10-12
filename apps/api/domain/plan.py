@@ -113,7 +113,7 @@ class PlanPlot(UntrustedModel):
 
 
 class ProcessPlan(UntrustedModel):
-    LIST_CAPS: ClassVar[dict[str, int]] = {"waste_streams": 6, "utilities": 6, "environment": 6}
+    LIST_CAPS: ClassVar[dict[str, int]] = {"waste_streams": 6, "utilities": 6, "environment": 6, "raw_inputs": 4, "products": 4}
     industry: str = Field(min_length=2, max_length=80)
     location: str = Field(default="", max_length=120)
     suggested_plot: PlanPlot
@@ -121,6 +121,19 @@ class ProcessPlan(UntrustedModel):
     waste_streams: list[PlanWaste] = Field(default_factory=list, max_length=6)
     utilities: list[str] = Field(default_factory=list, max_length=6)
     environment: list[PlanEnvironment] = Field(default_factory=list, max_length=6)
+    raw_inputs: list[str] = Field(default_factory=list, max_length=4)
+    products: list[str] = Field(default_factory=list, max_length=4)
+    farm_crop: str = Field(default="", max_length=40)
+
+    @field_validator("raw_inputs", "products")
+    @classmethod
+    def names_are_short(cls, value: list[str]) -> list[str]:
+        return [item.strip()[:60] for item in value if isinstance(item, str) and item.strip()][:4]
+
+    @field_validator("farm_crop", mode="before")
+    @classmethod
+    def crop_is_one_short_name(cls, value: object) -> str:
+        return re.sub(r"[^A-Za-z \-]", "", value).strip()[:40] if isinstance(value, str) else ""
 
     @field_validator("utilities")
     @classmethod

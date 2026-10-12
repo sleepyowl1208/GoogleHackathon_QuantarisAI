@@ -21,6 +21,7 @@ export const LayoutResultSchema = z.object({
   claims: z.array(ClaimSchema), freshness: z.string(),
   location: z.string().nullish(), waste_streams: z.array(WasteSchema).default([]), utilities: z.array(z.string()).default([]), environment: z.array(EnvironmentSchema).default([]), drafted_by: z.string().default("template"),
   levels: z.number().default(1), vehicles: z.array(VehicleSchema).default([]),
+  raw_inputs: z.array(z.string()).default([]), products: z.array(z.string()).default([]), farm_crop: z.string().default(""),
 });
 
 export type Waste = z.infer<typeof WasteSchema>;

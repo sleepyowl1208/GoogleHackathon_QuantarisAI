@@ -42,6 +42,22 @@ class BlueprintServiceTests(unittest.TestCase):
         self.assertEqual(result.waste_streams[0].by_product_ideas, ["Coir products", "Shell charcoal"])
         self.assertEqual(result.utilities[0], "Steady grid power for presses")
 
+    def test_raw_input_product_and_farm_crop_reach_the_layout_and_are_tidied(self):
+        result = svc(plan(raw_inputs=["Whole fresh pineapples", "  ", "x" * 200], products=["Canned pineapple rings"], farm_crop="<b>Pineapple</b>!")).create(BlueprintRequest(prompt="pineapple factory"))
+        self.assertEqual(result.raw_inputs[0], "Whole fresh pineapples")
+        self.assertEqual(len(result.raw_inputs), 2)
+        self.assertEqual(len(result.raw_inputs[1]), 60)
+        self.assertEqual(result.products, ["Canned pineapple rings"])
+        self.assertEqual(result.farm_crop, "bPineappleb")  # only letters, spaces and hyphens survive
+
+    def test_too_many_raw_inputs_are_trimmed_not_rejected(self):
+        result = svc(plan(raw_inputs=[f"input {i}" for i in range(9)], products=[f"product {i}" for i in range(7)])).create(BlueprintRequest(prompt="x factory"))
+        self.assertEqual((len(result.raw_inputs), len(result.products)), (4, 4))
+
+    def test_designs_without_these_fields_still_work(self):
+        result = svc(plan()).create(BlueprintRequest(prompt="coconut oil mill"))
+        self.assertEqual((result.raw_inputs, result.products, result.farm_crop), ([], [], ""))
+
     def test_ai_content_is_labelled_inference_never_fact(self):
         result = svc(plan()).create(BlueprintRequest(prompt="coconut oil mill"))
         ai_claim = next(c for c in result.claims if "drafted by AI" in c.statement)

@@ -125,3 +125,6 @@ class LayoutResult(Contract):
     drafted_by: str = "template"
     levels: int = 1
     vehicles: list[Vehicle] = Field(default_factory=list)
+    raw_inputs: list[str] = Field(default_factory=list)   # what arrives at the gate, whole and unprocessed
+    products: list[str] = Field(default_factory=list)     # what leaves the dispatch dock
+    farm_crop: str = ""                                   # the crop grown on a nearby farm, if the raw material is a crop
