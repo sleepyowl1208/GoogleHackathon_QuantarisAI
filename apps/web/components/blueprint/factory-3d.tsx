@@ -3,7 +3,9 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { GestureBus } from "@/lib/gesture-bus";
 import { FlowArrows } from "./flow-and-people";
-import { Cows, HenBarn, Pasture, Smoke, Vehicles, Workers } from "./life";
+import { Cows, HenBarn, Pasture, Smoke, Vehicles } from "./life";
+import { Workers } from "./people";
+import { MaterialFlow } from "./material-flow";
 import { burnsFuel, isPoultry, useSmokeLevel } from "@/lib/ops-bus";
 import { WaterRoutes, type RouteLine } from "./water-routes";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
@@ -134,6 +136,7 @@ function CameraRig({ W, D, resetKey }: { W: number; D: number; resetKey: number 
 export function Factory3D({ layout, dark, solar, flow, labels, activeId, tourId, highlightIds, builtCount = Infinity, resetKey, onActive, onPick, onOpen, onUserMove, gesture, onGestureTap, routes }: { routes?: RouteLine[]; gesture?: GestureBus; onGestureTap?: (id?: string) => void; onOpen?: (id: string) => void; builtCount?: number; highlightIds?: string[]; layout: LayoutResult; dark: boolean; solar: boolean; flow: boolean; labels: boolean; activeId?: string; tourId?: string; resetKey: number; onActive: (id?: string) => void; onPick: (id: string) => void; onUserMove?: () => void }) {
   const { width_m: W, depth_m: D } = layout;
   const smoke = useSmokeLevel();
+  const hygiene = /food|dairy|milk|egg|pickle|flour|fruit|juice|bakery|sweet|curd|butter|ghee|mango/i.test(layout.industry + " " + layout.label);
   const reach = Math.max(W, D);
   const workerCount = (z: Zone) => (z.step ? Math.min(3, Math.max(1, Math.round(z.area_m2 / 110))) : z.kind === "office" ? 2 : 0);
   const vehicles = useMemo(() => (layout.vehicles.length ? layout.vehicles : defaultVehicles(layout)), [layout]);
@@ -188,14 +191,15 @@ export function Factory3D({ layout, dark, solar, flow, labels, activeId, tourId,
             {fresh ? <mesh position={[0, 0.3, 0]}><boxGeometry args={[iw + 1.2, 0.08, id + 1.2]} /><meshBasicMaterial color="#2FBF4A" transparent opacity={0.55} /></mesh> : null}
             {z.kind === "livestock" && isPoultry(`${z.label} ${z.note} ${z.equipment.join(" ")}`) ? <HenBarn id={z.zone_id} width={iw * 0.9} depth={id * 0.9} scale={Math.max(1, reach / 42)} /> : z.kind === "livestock" ? <Cows id={z.zone_id} width={iw * 0.86} depth={id * 0.86} count={Math.min(8, Math.max(2, Math.round(z.area_m2 / 85)))} scale={Math.max(1.25, reach / 36)} /> : <ZoneProps zone={z} />}
             {solar && z.step && z.kind !== "livestock" ? <group>{[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sz]) => <mesh key={`${sx}${sz}`} position={[sx * iw * 0.15, z.height_m / 2, sz * id * 0.15]}><boxGeometry args={[0.18, z.height_m, 0.18]} /><meshStandardMaterial color="#8A939E" /></mesh>)}<mesh position={[0, z.height_m + 0.15, 0]}><boxGeometry args={[iw * 0.34, 0.22, id * 0.34]} /><meshStandardMaterial color="#3E5568" metalness={0.5} roughness={0.35} transparent opacity={0.62} /></mesh></group> : null}
-            {workerCount(z) > 0 && z.kind !== "livestock" ? <Workers id={z.zone_id} width={iw} depth={id} count={workerCount(z)} scale={Math.max(1.4, reach / 27)} /> : null}
-            {z.step && z.kind !== "livestock" && burnsFuel(`${z.label} ${z.equipment.join(" ")}`) ? <group position={[iw * 0.36, 0, -id * 0.36]}><Smoke height={Math.max(z.height_m + 3, 7)} level={smoke} scale={Math.max(1, reach / 40)} /></group> : null}
+            {workerCount(z) > 0 && z.kind !== "livestock" ? <Workers id={z.zone_id} width={iw} depth={id} count={workerCount(z)} scale={Math.max(1.4, reach / 27)} hygiene={hygiene} /> : null}
+            {z.step && z.kind !== "livestock" && burnsFuel(`${z.label} ${z.equipment.join(" ")}`) ? <group position={[iw * 0.36, 0, -id * 0.36]}><Smoke height={z.height_m + Math.max(12, reach * 0.45)} level={smoke} scale={Math.max(1, reach / 40)} /></group> : null}
             {z.step ? <Badge n={z.step} label={z.label} showLabel={labels} size={Math.max(2.2, reach / 24)} y={z.height_m + Math.max(2, reach / 30)} /> : null}
           </BuildIn>
         );
       })}
       {activeZone ? <ActiveRing x={activeZone.x + activeZone.width_m / 2 - W / 2} z={-(activeZone.y + activeZone.depth_m / 2 - D / 2)} r={Math.max(activeZone.width_m, activeZone.depth_m) * 0.56} /> : null}
       {flow && !building && flowPoints.length >= 2 ? <FlowArrows points={flowPoints} colors={flowColors} size={Math.max(0.9, reach / 62)} /> : null}
+      {flow && !building ? <MaterialFlow layout={layout} reach={reach} byproductName={layout.waste_streams[0]?.by_product_ideas[0]} /> : null}
       {routes?.length ? <WaterRoutes layout={layout} routes={routes} reach={reach} /> : null}
       {vehicles.length ? <Vehicles layout={layout} list={vehicles} reach={reach} /> : null}
       <CameraRig W={W} D={D} resetKey={resetKey} />

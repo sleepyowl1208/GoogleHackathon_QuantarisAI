@@ -24,7 +24,11 @@ make dev
 Open http://localhost:3000. Or run them in two terminals:
 
 ```sh
-.venv/bin/python -m uvicorn apps.api.main:app --port 8000
+# API, from the project root
+.venv/bin/python -m uvicorn apps.api.main:app --port 8000 --reload
+# or from inside apps/api
+cd apps/api && ../../.venv/bin/python -m uvicorn main:app --reload
+# web
 cd apps/web && npm run dev
 ```
 

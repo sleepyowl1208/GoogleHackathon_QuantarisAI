@@ -4,72 +4,10 @@ import { useMemo, useRef } from "react";
 import type { Group } from "three";
 import type { LayoutResult, Vehicle } from "@/lib/layout-api";
 
-function rng(seed: number) { let a = seed >>> 0; return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
-const hash = (s: string) => { let h = 2166136261; for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619); return h >>> 0; };
-const VEST = ["#2F6FDB", "#1F4E9E", "#5B7FA6", "#E9EEF5", "#F2C230"], SKIN = ["#D9A47A", "#B97C55", "#8D5A3B", "#E7BC96"], PANTS = ["#35404C", "#2F3A55", "#4A4036"];
+export function rng(seed: number) { let a = seed >>> 0; return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+export const hash = (s: string) => { let h = 2166136261; for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619); return h >>> 0; };
 const smooth = (x: number) => x * x * (3 - 2 * x);
 
-type Role = "operator" | "walker" | "carrier";
-type Walker = { x: number; z: number; tx: number; tz: number; wait: number; phase: number; role: Role; speed: number; ax: number; az: number; bx: number; bz: number; toB: boolean };
-
-/** Small people with different jobs: operators stay at their machine, walkers wander the section, carriers shuttle a crate between two points. Decoration, not data. */
-export function Workers({ id, width, depth, count, scale }: { id: string; width: number; depth: number; count: number; scale: number }) {
-  const rand = useMemo(() => rng(hash(id)), [id]);
-  const state = useMemo<Walker[]>(() => Array.from({ length: count }, (_, i) => {
-    const role: Role = (["operator", "walker", "carrier"] as const)[(i + (hash(id) % 3)) % 3];
-    const at = () => [(rand() - 0.5) * width * 0.74, (rand() - 0.5) * depth * 0.74] as const;
-    const [x, z] = at(), [bx, bz] = at();
-    return { x, z, tx: x, tz: z, wait: rand() * 3, phase: rand() * 6, role, speed: 0.8 + rand() * 0.55, ax: x, az: z, bx, bz, toB: true };
-  }), [count, width, depth, rand, id]);
-  const look = useMemo(() => state.map((_, i) => ({ vest: VEST[(hash(id) + i * 2) % VEST.length], skin: SKIN[(hash(id) + i * 3) % SKIN.length], pants: PANTS[(hash(id) + i * 5) % PANTS.length] })), [state, id]);
-  const roots = useRef<(Group | null)[]>([]), legsL = useRef<(Group | null)[]>([]), legsR = useRef<(Group | null)[]>([]), armsL = useRef<(Group | null)[]>([]), armsR = useRef<(Group | null)[]>([]), crates = useRef<(Group | null)[]>([]);
-  useFrame(({ clock }, dt) => {
-    const t = clock.elapsedTime;
-    state.forEach((w, i) => {
-      const g = roots.current[i]; if (!g) return;
-      const speed = 1.2 * scale * w.speed;
-      if (w.role === "carrier") { w.tx = w.toB ? w.bx : w.ax; w.tz = w.toB ? w.bz : w.az; }
-      const dx = w.tx - w.x, dz = w.tz - w.z, dist = Math.hypot(dx, dz), walking = dist >= 0.15 * scale;
-      if (!walking) {
-        w.wait -= dt;
-        if (w.wait <= 0) {
-          if (w.role === "carrier") { w.toB = !w.toB; w.wait = 1.2 + rand() * 1.5; }
-          else if (w.role === "walker") { w.tx = (rand() - 0.5) * width * 0.78; w.tz = (rand() - 0.5) * depth * 0.78; w.wait = 1.5 + rand() * 4; }
-          else { w.tx = w.ax + (rand() - 0.5) * 1.6 * scale; w.tz = w.az + (rand() - 0.5) * 1.6 * scale; w.wait = 5 + rand() * 7; } // an operator only shuffles about at the machine
-        }
-      } else { const step = Math.min(dist, speed * dt); w.x += (dx / dist) * step; w.z += (dz / dist) * step; }
-      const faceCentre = Math.atan2(-w.x, -w.z); // when still, look at the machines in the middle of the section
-      const want = walking ? Math.atan2(dx, dz) : faceCentre;
-      let diff = want - g.rotation.y; diff = Math.atan2(Math.sin(diff), Math.cos(diff)); g.rotation.y += diff * Math.min(1, dt * 7);
-      g.position.set(w.x, 0.25 + (walking ? Math.abs(Math.sin(t * 8 * w.speed + w.phase)) * 0.035 * scale : 0), w.z);
-      const swing = walking ? Math.sin(t * 8 * w.speed + w.phase) : 0;
-      const set = (r: React.RefObject<(Group | null)[]>, v: number) => { const n = r.current[i]; if (n) n.rotation.x = v; };
-      set(legsL, swing * 0.75); set(legsR, -swing * 0.75);
-      const carrying = w.role === "carrier" && w.toB;   // carries a crate on the way out, walks back empty-handed
-      if (carrying) { set(armsL, -1.15); set(armsR, -1.15); }
-      else if (walking) { set(armsL, -swing * 0.6); set(armsR, swing * 0.6); }
-      else { const busy = Math.sin(t * 3.2 + w.phase) * 0.14; set(armsL, -0.95 + busy); set(armsR, -0.8 - busy); }
-      const crate = crates.current[i]; if (crate) crate.visible = carrying;
-    });
-  });
-  return (
-    <>
-      {state.map((w, i) => (
-        <group key={i} ref={(el) => { roots.current[i] = el; }} position={[w.x, 0.25, w.z]} scale={scale}>
-          <group ref={(el) => { legsL.current[i] = el; }} position={[-0.09, 0.82, 0]}><mesh position={[0, -0.4, 0]}><capsuleGeometry args={[0.07, 0.6, 4, 8]} /><meshStandardMaterial color={look[i].pants} /></mesh><mesh position={[0, -0.82, 0.05]}><boxGeometry args={[0.12, 0.07, 0.24]} /><meshStandardMaterial color="#1E2329" /></mesh></group>
-          <group ref={(el) => { legsR.current[i] = el; }} position={[0.09, 0.82, 0]}><mesh position={[0, -0.4, 0]}><capsuleGeometry args={[0.07, 0.6, 4, 8]} /><meshStandardMaterial color={look[i].pants} /></mesh><mesh position={[0, -0.82, 0.05]}><boxGeometry args={[0.12, 0.07, 0.24]} /><meshStandardMaterial color="#1E2329" /></mesh></group>
-          <mesh position={[0, 1.13, 0]}><capsuleGeometry args={[0.17, 0.36, 4, 10]} /><meshStandardMaterial color={look[i].vest} roughness={0.7} /></mesh>
-          <group ref={(el) => { armsL.current[i] = el; }} position={[-0.24, 1.34, 0]}><mesh position={[0, -0.25, 0]}><capsuleGeometry args={[0.052, 0.4, 4, 8]} /><meshStandardMaterial color="#F1EBDD" /></mesh><mesh position={[0, -0.53, 0]}><sphereGeometry args={[0.058, 8, 8]} /><meshStandardMaterial color={look[i].skin} /></mesh></group>
-          <group ref={(el) => { armsR.current[i] = el; }} position={[0.24, 1.34, 0]}><mesh position={[0, -0.25, 0]}><capsuleGeometry args={[0.052, 0.4, 4, 8]} /><meshStandardMaterial color="#F1EBDD" /></mesh><mesh position={[0, -0.53, 0]}><sphereGeometry args={[0.058, 8, 8]} /><meshStandardMaterial color={look[i].skin} /></mesh></group>
-          <mesh position={[0, 1.6, 0]}><sphereGeometry args={[0.125, 14, 12]} /><meshStandardMaterial color={look[i].skin} /></mesh>
-          <mesh position={[0, 1.66, 0]}><sphereGeometry args={[0.145, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshStandardMaterial color="#FFD23F" /></mesh>
-          <mesh position={[0, 1.66, 0.1]}><boxGeometry args={[0.2, 0.025, 0.12]} /><meshStandardMaterial color="#FFD23F" /></mesh>
-          <group ref={(el) => { crates.current[i] = el; }} position={[0, 1.0, 0.42]} visible={false}><mesh><boxGeometry args={[0.42, 0.28, 0.32]} /><meshStandardMaterial color="#B5865A" /></mesh><mesh position={[0, 0.16, 0]}><boxGeometry args={[0.36, 0.05, 0.26]} /><meshStandardMaterial color="#D8B98A" /></mesh></group>
-        </group>
-      ))}
-    </>
-  );
-}
 
 type Grazer = { x: number; z: number; tx: number; tz: number; wait: number; phase: number };
 const COAT = [["#F5F2EA", "#2B2B2B"], ["#8B5A3C", "#F1E7D8"], ["#B98760", "#F5F2EA"], ["#2B2B2B", "#F5F2EA"]];
@@ -256,8 +194,8 @@ export function Smoke({ height, level, scale }: { height: number; level: number;
   });
   return (
     <group position={[0, height, 0]}>
-      <mesh position={[0, -height / 2 + 0.2, 0]}><cylinderGeometry args={[0.38 * scale, 0.55 * scale, height, 10]} /><meshStandardMaterial color="#8C5A44" /></mesh>
-      <mesh position={[0, 0.12, 0]}><cylinderGeometry args={[0.46 * scale, 0.4 * scale, 0.25 * scale, 10]} /><meshStandardMaterial color="#3B3B3B" /></mesh>
+      <mesh position={[0, -height / 2 + 0.2, 0]}><cylinderGeometry args={[0.2 * scale, 0.34 * scale, height, 12]} /><meshStandardMaterial color="#8C5A44" /></mesh>
+      <mesh position={[0, 0.12, 0]}><cylinderGeometry args={[0.27 * scale, 0.22 * scale, 0.25 * scale, 12]} /><meshStandardMaterial color="#3B3B3B" /></mesh>
       {Array.from({ length: puffs }, (_, i) => <group key={i} ref={(el) => { refs.current[i] = el; }} position={[0, 0.3, 0]}><mesh><sphereGeometry args={[1, 8, 6]} /><meshStandardMaterial color={level > 0.5 ? "#3A3A3A" : "#8A8A8A"} transparent opacity={0.4} depthWrite={false} /></mesh></group>)}
     </group>
   );

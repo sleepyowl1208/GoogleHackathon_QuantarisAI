@@ -10,7 +10,7 @@ import { ClaimList } from "../blueprint/claim-list";
 import { Line } from "./ops-chart";
 
 export type OwnData = { name: string; rows: DayRow[] };
-const SAMPLES = [["dairy-plant", "sampleDairy"], ["switchgear-factory", "sampleSwitch"], ["textile-dyeing", "sampleTextile"]] as const;
+const SAMPLES = [["coconut-husk-coir", "sampleCoir"], ["dairy-plant", "sampleDairy"], ["switchgear-factory", "sampleSwitch"], ["steel-rerolling-mill", "sampleSteel"], ["egg-packing", "sampleEgg"], ["pickle-factory", "samplePickle"], ["textile-dyeing", "sampleTextile"]] as const;
 const fmt = (n: number, d = 0) => n.toLocaleString(undefined, { maximumFractionDigits: d });
 const fill = (text: string, vars: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
 

@@ -1,5 +1,5 @@
 "use client";
-import { Activity, ArrowRight, Box, ChevronDown, ImageIcon, Loader2, Gauge, Globe2, IndianRupee, Leaf, ListOrdered, Map as MapIcon, Recycle, ShieldCheck, Zap, Lightbulb, MessageCircleQuestion, TriangleAlert, type LucideIcon } from "lucide-react";
+import { Activity, MapPinned, ArrowRight, Box, ChevronDown, ImageIcon, Loader2, Gauge, Globe2, IndianRupee, Leaf, ListOrdered, Map as MapIcon, Recycle, ShieldCheck, Zap, Lightbulb, MessageCircleQuestion, TriangleAlert, type LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ClaimList } from "@/components/blueprint/claim-list";
 import { StepIcon } from "@/components/blueprint/step-icon";
@@ -9,6 +9,8 @@ import type { LayoutResult, Waste, Zone } from "@/lib/layout-api";
 import type { Session } from "@/lib/sessions";
 import type { SiteConditions, SiteResearch } from "@/lib/research-api";
 import { OpsPanel } from "./ops-panel";
+import { ScoutPanel } from "./scout-panel";
+import { ReusePanel } from "./reuse-panel";
 import { EnvironmentPlan, ByproductWorkflow, OperationsIntelligence, PowerWater, type InsightsState } from "./insights-panels";
 import { LayoutViewer } from "./layout-viewer";
 import { PracticesPanel, type PracticesState } from "./practices-panel";
@@ -93,7 +95,7 @@ function Tabs<T extends string>({ tabs, value, onChange }: { tabs: TabDef<T>[]; 
   );
 }
 
-type DesignTab = "steps" | "map" | "practices" | "costs" | "environment" | "byproducts" | "power" | "operations" | "aiops" | "assumptions";
+type DesignTab = "steps" | "map" | "practices" | "costs" | "environment" | "byproducts" | "power" | "operations" | "aiops" | "scout" | "reuse" | "assumptions";
 
 function StepsList({ steps, selectedStep, onSelectStep, onHover, newIds, t, industry, onOpenSection }: { onOpenSection?: (id: string) => void; industry: string; steps: Zone[]; selectedStep?: string; onSelectStep: (id?: string) => void; onHover: (id?: string) => void; newIds?: string[]; t: Dict }) {
   const [batch, setBatch] = useState<{ done: number; total: number }>();
@@ -165,8 +167,8 @@ function DesignWorkspace({ design, t, dark, webgl, selectedStep, onSelectStep, n
       <section className="qa-panel qa-card" aria-label="Details">
         <Tabs<DesignTab> value={tab} onChange={(id) => { sp.setWide(false); setTab(id); }} tabs={[
           { id: "steps", label: t.tabSteps, icon: ListOrdered, group: "plant" },
-          { id: "map", label: t.tabMap, icon: MapIcon, group: "place" }, { id: "practices", label: t.tabPractices, icon: Globe2, group: "place" },
-          { id: "environment", label: t.tabEnvironment, icon: Leaf, group: "impact" }, { id: "byproducts", label: t.tabByproducts, icon: Recycle, group: "impact" }, { id: "power", label: t.tabPower, icon: Zap, group: "impact" },
+          { id: "map", label: t.tabMap, icon: MapIcon, group: "place" }, { id: "scout", label: t.sc.tab, icon: MapPinned, group: "place" }, { id: "practices", label: t.tabPractices, icon: Globe2, group: "place" },
+          { id: "reuse", label: t.ru.tab, icon: Recycle, group: "impact" }, { id: "environment", label: t.tabEnvironment, icon: Leaf, group: "impact" }, { id: "byproducts", label: t.tabByproducts, icon: Recycle, group: "impact" }, { id: "power", label: t.tabPower, icon: Zap, group: "impact" },
           { id: "costs", label: t.tabCosts, icon: IndianRupee, group: "money" },
           { id: "operations", label: t.tabOperations, icon: Gauge, group: "run" }, { id: "aiops", label: t.ao.tabAi, icon: Activity, group: "run" },
           { id: "assumptions", label: t.tabAssumptions, icon: ShieldCheck, group: "proof" }]} />
@@ -180,6 +182,8 @@ function DesignWorkspace({ design, t, dark, webgl, selectedStep, onSelectStep, n
             {tab === "byproducts" ? <ByproductWorkflow state={insights} design={design} t={t} onPickStep={jump} /> : null}
             {tab === "power" ? <PowerWater state={insights} design={design} site={site} t={t} onPickStep={jump} /> : null}
             {tab === "operations" ? <OperationsIntelligence state={insights} design={design} research={research} t={t} onPickStep={jump} /> : null}
+            {tab === "reuse" ? <ReusePanel design={design} location={site?.location ?? design.location ?? ""} language={language} t={t} onPickStep={jump} /> : null}
+            {tab === "scout" ? <ScoutPanel t={t} language={language} defaultPlace={site?.location ?? design.location ?? ""} industry={design.label} /> : null}
             {tab === "aiops" ? <OpsPanel design={design} research={research} location={site?.location ?? design.location ?? ""} t={t} language={language} onPickStep={jump} /> : null}
             {tab === "assumptions" ? <ClaimList claims={design.claims} labels={t.claimLabels} /> : null}
           </div>

@@ -10,6 +10,10 @@ PLANTS = {
     "dairy-plant": (18000, 0.0042, 0.82, 0.11, 0.012, "a cooling-water valve sticks open from day 120 and water use climbs"),
     "switchgear-factory": (420, 0.31, 0.55, 38.0, 4.6, "scrap and coolant waste rise after a tool change on day 100"),
     "textile-dyeing": (9000, 0.052, 0.9, 0.42, 0.045, "rinse cycles run too long on night shifts, so water use is higher at night"),
+    "coconut-husk-coir": (100, 0.02, 0.7, 0.25, 0.1, "the soaking water stops being recycled from day 90, so water use per kg of husk jumps"),
+    "steel-rerolling-mill": (300, 0.8, 0.35, 120.0, 12.0, "the reheating furnace loses efficiency from day 110, so energy per tonne creeps up"),
+    "egg-packing": (40000, 0.0004, 0.85, 0.003, 0.002, "night-shift washing runs a long cycle, and breakages (waste) rise on Mondays"),
+    "pickle-factory": (800, 0.01, 0.85, 0.6, 0.15, "brine is discharged in one batch every Friday, spiking effluent and waste"),
 }
 DAYS = 180
 
@@ -31,6 +35,16 @@ def rows(name: str, start: date = date(2026, 1, 1)) -> list[dict]:
             gi *= 1.35
         if name == "textile-dyeing":
             wi *= 1.18 if i % 3 == 2 else 1.0
+        if name == "coconut-husk-coir" and i >= 90:
+            wi *= 1.55
+        if name == "steel-rerolling-mill" and i >= 110:
+            ei *= 1 + 0.002 * (i - 110)
+        if name == "egg-packing":
+            wi *= 1.25 if i % 2 == 0 else 1.0
+            gi *= 1.6 if d.weekday() == 0 else 1.0
+        if name == "pickle-factory" and d.weekday() == 4:
+            wi *= 1.5
+            gi *= 1.8
         if rng.random() < 0.012:
             wi *= 1.9  # a one-off spike (burst pipe, forgotten tap)
         water = units * wi

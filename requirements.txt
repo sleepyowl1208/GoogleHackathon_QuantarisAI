@@ -1,4 +1,2 @@
-# Backend (apps/api). The Gemini calls use only the Python standard library, so these are the only packages.
-# Python 3.11 or newer. Install into the project venv:  python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-fastapi==0.143.0
-uvicorn[standard]==0.54.0
+# The backend packages live in apps/api/requirements.txt.
+-r apps/api/requirements.txt

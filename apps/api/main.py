@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+# Lets the server start from this folder as well as from the project root: `python -m uvicorn main:app --reload`.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 import json
 from collections.abc import Iterator
 
@@ -32,6 +38,10 @@ from apps.api.domain.insights import FactoryInsights, InsightsRequest
 from apps.api.domain.layout import BlueprintRequest, LayoutRequest, LayoutResult, TemplateSummary
 from apps.api.domain.plan import PlanUnavailable
 from apps.api.domain.ops import OpsPack, OpsRequest
+from apps.api.agents.reuse_agent import ReuseAgent
+from apps.api.domain.reuse import ReusePlan, ReuseRequest
+from apps.api.agents.scout_agent import ScoutAgent
+from apps.api.domain.scout import ScoutRequest, ScoutResult
 from apps.api.agents.ops_agents import BriefAgent, InspectAgent
 from apps.api.domain.ops_ai import Brief, BriefRequest, InspectRequest, InspectResult
 from apps.api.domain.balance import BalanceRequest, BalanceResult
@@ -74,6 +84,10 @@ step_env_budget = CallBudget(120)
 brief_agent = BriefAgent(gemini)
 inspect_agent = InspectAgent(gemini)
 ops_ai_budget = CallBudget(150)
+scout_agent = ScoutAgent(gemini, geocoder)
+scout_budget = CallBudget(40)
+reuse_agent = ReuseAgent(gemini)
+reuse_budget = CallBudget(80)
 costs_budget = CallBudget(40)
 edit_budget = CallBudget(80)
 practices_budget = CallBudget(40)
@@ -221,6 +235,24 @@ def operations(request: OpsRequest) -> OpsPack:
 def resource_balance(request: BalanceRequest) -> BalanceResult:
     """Water, energy and waste balance from the plant's own daily records; arithmetic only."""
     return balance(request)
+
+
+@app.post("/api/scout", response_model=ScoutResult)
+def scout_locations(request: ScoutRequest) -> ScoutResult:
+    try:
+        scout_budget.acquire(1)
+        return scout_agent.scout(request)
+    except PlanUnavailable as error:
+        raise HTTPException(status_code=error.status, detail={"code": error.code, "message": error.message}) from error
+
+
+@app.post("/api/reuse", response_model=ReusePlan)
+def reuse_plan(request: ReuseRequest) -> ReusePlan:
+    try:
+        reuse_budget.acquire(1)
+        return reuse_agent.plan(request)
+    except PlanUnavailable as error:
+        raise HTTPException(status_code=error.status, detail={"code": error.code, "message": error.message}) from error
 
 
 @app.post("/api/ops-brief", response_model=Brief)
