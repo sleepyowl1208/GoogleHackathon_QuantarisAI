@@ -252,37 +252,37 @@ export function ChatApp() {
 
   return (
     <>
-    <div lang={profile.language} className={`app ${collapsed ? "collapsed" : ""} ${navOpen ? "nav-open" : ""} ${hasWorkspace || loadingWorkspace ? "split" : ""} tab-${mobileTab}`}>
-      <div className="flag-strip" aria-hidden="true" />
-      <Sidebar sessions={sessions} activeId={activeId} t={t} name={profile.name} language={profile.language} onNew={newChat}
-        onSelect={(id) => { selectSession(id); setSelectedStep(undefined); setNavOpen(false); setMobileTab("chat"); }} onDelete={deleteSession} onRename={renameSession}
-        onName={(name) => setProfile({ name })} onLanguage={(language) => setProfile({ language })} onClose={() => { setCollapsed(true); setNavOpen(false); }} />
-      {navOpen ? <button type="button" className="scrim" aria-label={t.collapse} onClick={() => setNavOpen(false)} /> : null}
+      <div lang={profile.language} className={`app ${collapsed ? "collapsed" : ""} ${navOpen ? "nav-open" : ""} ${hasWorkspace || loadingWorkspace ? "split" : ""} tab-${mobileTab}`}>
+        <div className="flag-strip" aria-hidden="true" />
+        <Sidebar sessions={sessions} activeId={activeId} t={t} name={profile.name} language={profile.language} onNew={newChat}
+          onSelect={(id) => { selectSession(id); setSelectedStep(undefined); setNavOpen(false); setMobileTab("chat"); }} onDelete={deleteSession} onRename={renameSession}
+          onName={(name) => setProfile({ name })} onLanguage={(language) => setProfile({ language })} onClose={() => { setCollapsed(true); setNavOpen(false); }} />
+        {navOpen ? <button type="button" className="scrim" aria-label={t.collapse} onClick={() => setNavOpen(false)} /> : null}
 
-      <main className="qa-main">
-        <header className="chat-head">
-          <button type="button" className="icon-btn ghost menu-btn" onClick={() => { setCollapsed(false); setNavOpen(true); }} aria-label={t.openMenu} title={t.openMenu}><Menu size={20} /></button>
-          <h1 className="chat-title">{active?.title || t.newDesign}</h1>
-          {active && translateStatus[`${active.id}:${lang}`] === "loading" ? <span className="chip translate-chip" role="status"><Loader2 size={14} className="spin" />{t.translating}</span> : null}
-          {active && translateStatus[`${active.id}:${lang}`] === "error" ? <button type="button" className="chip translate-chip fail" onClick={() => setTranslateStatus((s) => { const { [`${active.id}:${lang}`]: _x, ...rest } = s; void _x; return rest; })}><Languages size={14} />{t.translateFailed}</button> : null}
-          {hasWorkspace ? <button type="button" className="chip strong head-download" onClick={downloadReport} title={t.rp.downloadHint}><Download size={15} /><span>{t.rp.download}</span></button> : null}
-          {hasWorkspace ? (
-            <div className="seg mobile-tabs" role="group">
-              <button type="button" className={mobileTab === "chat" ? "on" : ""} aria-pressed={mobileTab === "chat"} onClick={() => setMobileTab("chat")}>{t.mobileChat}</button>
-              <button type="button" className={mobileTab === "workspace" ? "on" : ""} aria-pressed={mobileTab === "workspace"} onClick={() => setMobileTab("workspace")}>{t.mobileWorkspace}</button>
-            </div>
-          ) : null}
-        </header>
-        <div className="panes">
-          <Conversation t={t} lang={profile.language} name={profile.name} mode={active?.mode} messages={active ? displayMessages(active, lang, t) : []} busy={busy} phase={phase} showWelcome={showWelcome}
-            summary={active && hasWorkspace ? <SummaryCard session={view ?? active} t={t} researchPending={researchStatus[active.id] === "loading"} insightsPending={insightsStatus[active.id] === "loading"} onDownload={downloadReport} /> : null}
-            onPickMode={pickMode} onExample={startWith} onSend={(text, files) => void send(text, files)} />
-          {loadingWorkspace ? <WorkspaceSkeleton t={t} /> : null}
-          {active && hasWorkspace ? <Workspace session={view ?? active} t={t} dark={dark} webgl={webgl} selectedStep={selectedStep} onSelectStep={setSelectedStep} researchStatus={researchStatus[active.id]} onRunResearch={() => retryResearch(active)} busy={busy} costs={{ data: view?.costs, status: costsStatus[active.id], onRun: () => retryCosts(active), needsPlace: !(active.location ?? active.design?.location ?? "").trim(), onSetPlace: setPlaceFor(active.id) }} onSetPlace={setPlaceFor(active.id)} language={lang} onSaveStepEnv={(key, env) => updateSession(active.id, (s) => ({ ...s, stepEnvs: { ...s.stepEnvs, [key]: env } }))} onLayoutEdit={(which, layout) => applyLayoutEdit(active.id, which, layout)} practices={{ data: view?.practices, status: practicesStatus[active.id], onRun: () => retryPractices(active) }} insights={{ insights: active.insights, status: insightsStatus[active.id], onRun: () => { if (active.design) runInsights(active.id, active.design, profile.language, active.location ?? active.design.location ?? ""); } }} /> : null}
-        </div>
-      </main>
-    </div>
-    {active && hasWorkspace ? <ReportDocument session={view ?? active} t={t} date={reportDate} /> : null}
+        <main className="qa-main">
+          <header className="chat-head">
+            <button type="button" className="icon-btn ghost menu-btn" onClick={() => { setCollapsed(false); setNavOpen(true); }} aria-label={t.openMenu} title={t.openMenu}><Menu size={20} /></button>
+            {/* <h1 className="chat-title">{active?.title || t.newDesign}</h1> */}
+            {active && translateStatus[`${active.id}:${lang}`] === "loading" ? <span className="chip translate-chip" role="status"><Loader2 size={14} className="spin" />{t.translating}</span> : null}
+            {active && translateStatus[`${active.id}:${lang}`] === "error" ? <button type="button" className="chip translate-chip fail" onClick={() => setTranslateStatus((s) => { const { [`${active.id}:${lang}`]: _x, ...rest } = s; void _x; return rest; })}><Languages size={14} />{t.translateFailed}</button> : null}
+            {hasWorkspace ? <button type="button" className="chip strong head-download" onClick={downloadReport} title={t.rp.downloadHint}><Download size={15} /><span>{t.rp.download}</span></button> : null}
+            {hasWorkspace ? (
+              <div className="seg mobile-tabs" role="group">
+                <button type="button" className={mobileTab === "chat" ? "on" : ""} aria-pressed={mobileTab === "chat"} onClick={() => setMobileTab("chat")}>{t.mobileChat}</button>
+                <button type="button" className={mobileTab === "workspace" ? "on" : ""} aria-pressed={mobileTab === "workspace"} onClick={() => setMobileTab("workspace")}>{t.mobileWorkspace}</button>
+              </div>
+            ) : null}
+          </header>
+          <div className="panes">
+            <Conversation t={t} lang={profile.language} name={profile.name} mode={active?.mode} messages={active ? displayMessages(active, lang, t) : []} busy={busy} phase={phase} showWelcome={showWelcome}
+              summary={active && hasWorkspace ? <SummaryCard session={view ?? active} t={t} researchPending={researchStatus[active.id] === "loading"} insightsPending={insightsStatus[active.id] === "loading"} onDownload={downloadReport} /> : null}
+              onPickMode={pickMode} onExample={startWith} onSend={(text, files) => void send(text, files)} />
+            {loadingWorkspace ? <WorkspaceSkeleton t={t} /> : null}
+            {active && hasWorkspace ? <Workspace session={view ?? active} t={t} dark={dark} webgl={webgl} selectedStep={selectedStep} onSelectStep={setSelectedStep} researchStatus={researchStatus[active.id]} onRunResearch={() => retryResearch(active)} busy={busy} costs={{ data: view?.costs, status: costsStatus[active.id], onRun: () => retryCosts(active), needsPlace: !(active.location ?? active.design?.location ?? "").trim(), onSetPlace: setPlaceFor(active.id) }} onSetPlace={setPlaceFor(active.id)} language={lang} onSaveStepEnv={(key, env) => updateSession(active.id, (s) => ({ ...s, stepEnvs: { ...s.stepEnvs, [key]: env } }))} onLayoutEdit={(which, layout) => applyLayoutEdit(active.id, which, layout)} practices={{ data: view?.practices, status: practicesStatus[active.id], onRun: () => retryPractices(active) }} insights={{ insights: active.insights, status: insightsStatus[active.id], onRun: () => { if (active.design) runInsights(active.id, active.design, profile.language, active.location ?? active.design.location ?? ""); } }} /> : null}
+          </div>
+        </main>
+      </div>
+      {active && hasWorkspace ? <ReportDocument session={view ?? active} t={t} date={reportDate} /> : null}
     </>
   );
 }

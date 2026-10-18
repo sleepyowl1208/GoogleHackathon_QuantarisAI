@@ -6,10 +6,12 @@ import type { Language, Mode } from "@/lib/chat-api";
 import type { Dict } from "@/lib/i18n";
 import type { Message } from "@/lib/sessions";
 import { VoiceInput } from "@/components/blueprint/voice-input";
+import { prepareImage } from "@/lib/image-prep";
 import { ATTACH_EVENT } from "./upload-cta";
 import { Welcome } from "./welcome";
 
 const ALLOWED = ["image/png", "image/jpeg", "image/webp", "application/pdf"];
+const PICKABLE = ["image/*", "application/pdf", ".heic", ".heif"]; // any image can be picked; it is checked by its contents and converted if the server could not read it
 const MAX_BYTES = 4_000_000;
 
 export function Conversation({ t, lang, name, mode, messages, busy, phase, showWelcome, summary, onPickMode, onExample, onSend }: {
@@ -32,17 +34,29 @@ export function Conversation({ t, lang, name, mode, messages, busy, phase, showW
   useEffect(() => { const el = area.current; if (el) { el.style.height = "auto"; el.style.height = `${Math.min(el.scrollHeight, 180)}px`; } }, [draft]);
   useEffect(() => { end.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, [messages.length, busy, phase]);
 
-  function addFiles(list: FileList | null) {
+  async function addFiles(list: FileList | null) {
     if (!list) return;
-    const next = [...files]; setFileError(undefined);
-    for (const file of Array.from(list)) {
+    const picked = Array.from(list); setFileError(undefined);
+    if (picker.current) picker.current.value = "";
+    const next = [...files];
+    for (const original of picked) {
+      const looksRight = original.type.startsWith("image/") || original.type === "application/pdf" || /\.(heic|heif|jpe?g|png|webp|avif|gif|bmp|pdf)$/i.test(original.name);
+      if (!looksRight) { setFileError(t.fileType); continue; }
+      if (next.length >= 3) { setFileError(t.tooMany); break; }
+      let file = original;
+      try { file = await prepareImage(original); } catch { setFileError(t.fileUnreadable); continue; }
       if (!ALLOWED.includes(file.type)) { setFileError(t.fileType); continue; }
       if (file.size > MAX_BYTES) { setFileError(t.fileTooBig); continue; }
-      if (next.length >= 3) { setFileError(t.tooMany); break; }
       next.push(file);
     }
     setFiles(next);
-    if (picker.current) picker.current.value = "";
+  }
+  // "Improve my factory" starts the chat with a sentence to finish, so the owner only has to fill the blanks and attach a photo; the first blank is selected for typing over.
+  function pick(next: Mode) {
+    onPickMode(next);
+    if (next !== "existing") return;
+    setDraft(t.existingPrefill);
+    requestAnimationFrame(() => { const el = area.current; if (!el) return; el.focus(); const at = t.existingPrefill.indexOf("___"); if (at >= 0) el.setSelectionRange(at, at + 3); });
   }
   function submit() {
     if (busy || (!draft.trim() && !files.length)) return;
@@ -56,7 +70,7 @@ export function Conversation({ t, lang, name, mode, messages, busy, phase, showW
   return (
     <div className={`conversation ${showWelcome ? "is-welcome" : ""}`}>
       <div className="thread" role="log" aria-live="polite">
-        {showWelcome ? <Welcome t={t} name={name} onPick={onPickMode} onExample={onExample} /> : (
+        {showWelcome ? <Welcome t={t} name={name} onPick={pick} onExample={onExample} /> : (
           <div className="thread-inner">
             {messages.map((m) => (
               <div key={m.id} className={`msg ${m.role}${m.error ? " error" : ""}`}>
@@ -94,7 +108,7 @@ export function Conversation({ t, lang, name, mode, messages, busy, phase, showW
           <textarea ref={area} rows={1} value={draft} placeholder={placeholder} aria-label={placeholder} maxLength={1500} onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }} />
           <div className="composer-actions">
-            <input ref={picker} type="file" hidden multiple accept={ALLOWED.join(",")} onChange={(e) => addFiles(e.target.files)} data-testid="file-input" />
+            <input ref={picker} type="file" hidden multiple accept={PICKABLE.join(",")} onChange={(e) => void addFiles(e.target.files)} data-testid="file-input" />
             <button type="button" className="icon-btn" onClick={() => picker.current?.click()} aria-label={t.attach} title={t.attach}><Paperclip size={19} /></button>
             <VoiceInput text={draft} onText={setDraft} lang={lang} t={t} stopKey={sentCount} />
             <span className="spacer" />

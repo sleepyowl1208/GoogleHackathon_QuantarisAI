@@ -54,7 +54,10 @@ export async function sendChat(body: ChatRequestBody): Promise<ChatResponse> {
     const payload = await response.json().catch(() => undefined) as { detail?: { message?: string } | unknown[] } | undefined;
     const message = payload && !Array.isArray(payload.detail) ? payload.detail?.message : undefined;
     if (message) throw new BlueprintError(message);
-    if (response.status === 422) throw new BlueprintError("That message or file couldn't be processed. Please shorten it or try a different file.");
+    if (response.status === 422) {
+      const detail = JSON.stringify(payload?.detail ?? "");
+      throw new BlueprintError(/do not match the stated type/i.test(detail) ? "That file isn't the type its name says. Please save it again as a JPEG or PNG and try once more." : /at most|too long|string_too_long/i.test(detail) ? "That message is too long. Please shorten it." : "That message or file couldn't be processed. Please try a shorter message or a different file.");
+    }
     throw new ServiceUnreachableError(String(response.status));
   }
   return ChatResponseSchema.parse(await response.json());
