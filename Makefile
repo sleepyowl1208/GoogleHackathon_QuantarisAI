@@ -13,3 +13,9 @@ api-test: test
 
 samples:
 	$(PY) -m apps.api.ops.sample_data
+
+docker-build:
+	docker build -t quantaris .
+
+docker-run:
+	docker run --rm -p 8080:8080 --env-file .env.local quantaris

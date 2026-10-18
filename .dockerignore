@@ -1,0 +1,27 @@
+.git
+.venv
+venv
+**/node_modules
+**/.next
+**/__pycache__
+**/*.pyc
+**/*.tsbuildinfo
+**/.DS_Store
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+.quantaris-cache
+apps/api/tests
+apps/web/tests
+docs
+# the old starter pages import a few small JSON files from here; everything else in design/ stays out of the image
+design/*
+!design/v2_full
+design/v2_full/*
+!design/v2_full/QuantarisAI-V2-handoff
+design/v2_full/QuantarisAI-V2-handoff/*
+!design/v2_full/QuantarisAI-V2-handoff/design-system
+design/v2_full/QuantarisAI-V2-handoff/design-system/*
+!design/v2_full/QuantarisAI-V2-handoff/design-system/handoff

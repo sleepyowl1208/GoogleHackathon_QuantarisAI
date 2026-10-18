@@ -255,6 +255,12 @@ def reuse_plan(request: ReuseRequest) -> ReusePlan:
         raise HTTPException(status_code=error.status, detail={"code": error.code, "message": error.message}) from error
 
 
+@app.get("/api/health")
+def health() -> dict[str, str]:
+    """For load balancers and deploy checks; it never calls the AI."""
+    return {"status": "ok"}
+
+
 @app.post("/api/ops-brief", response_model=Brief)
 def ops_brief(request: BriefRequest) -> Brief:
     try:
